@@ -12,6 +12,7 @@ import {
   AZNET,
   FRAGGATE,
   FRAGGATE_CALL,
+  FRAGGATE_LIVE_OPS,
   FRAGGATE_MCP,
   HOST,
   IDENTITY,
@@ -54,11 +55,15 @@ function toolDefs() {
   const desc = {
     health: "Liveness. Does not increment downloads.",
     skill: "Return AZHub skill markdown.",
-    place: "Place a module or Lock tile on the Blank Key. No meaning assigned.",
-    list_modules: "List placed tiles plus the alphabetical catalog. Not a ranking.",
+    place: "Place a module or Lock tile on the Blank Key. No meaning assigned. FragGate name: place_module.",
+    place_module: "FragGate name for Place. Same handler as /v1/place.",
+    list_modules: "List placed tiles plus the alphabetical catalog. Not a ranking. FragGate name: region_list.",
+    region_list: "FragGate name for the catalog/placed list. Same handler as /v1/list_modules.",
     tether_declare: "Declare a visible corridor. No auto-wiring.",
     tether_list: "List declared tethers only. Co-presence is not a tether.",
-    isolate: "Isolate a placed tile. Module remains complete.",
+    tether_cut: "Cut a declared corridor. Hub does not invent a replacement.",
+    isolate: "Isolate a placed tile. Module remains complete. Distinct from remove_module.",
+    remove_module: "Take a tile off the Blank Key. Module remains complete.",
     blank_key_status: "Blank Key geometry without intent. Home / sigil.",
     recommend: "STUB. Hub does not recommend.",
     rank: "STUB. Hub does not rank.",
@@ -166,6 +171,7 @@ function mcpDocs(origin) {
     note: "AI / MCP path is FragGate only. This host /v1/fraggate/* and /v1/runtime/* PROXY to aziel-runtime. Local ops are /v1/{op} only. Catalog MCP: POST " + FRAGGATE_MCP + ". AZInterface, AZBrowser, and AZNet are siblings, not this product.",
     ops: [...OPS],
     live_ops: [...LIVE_OPS],
+    fraggate_live_ops: [...FRAGGATE_LIVE_OPS],
     stub_ops: [...STUB_OPS],
     tools: toolDefs().map((t) => t.name),
     limitation: LIMITATION,
@@ -222,7 +228,7 @@ function aiHtml(origin) {
 <p class="banner">${LIMITATION}</p>
 <p>Human UI is the Worker homepage (Blank Key chrome). AI / MCP path is FragGate:</p>
 <pre>POST ${FRAGGATE_CALL}
-{"slug":"azhub","op":"place","payload":{"slug":"azmail","x":80,"y":80}}</pre>
+{"slug":"azhub","op":"place_module","payload":{"slug":"azmail","x":80,"y":80}}</pre>
 <p>Catalog MCP: <code>POST ${FRAGGATE_MCP}</code>. This Worker <code>/mcp</code> is a pointer, not a second MCP.</p>
 <p>OpenAPI: <a href="${origin}/openapi.json">${origin}/openapi.json</a></p>
 <p>Kernel: <a href="${FRAGGATE}">${FRAGGATE}</a> · siblings: <a href="${AZINTERFACE}">AZInterface</a> · <a href="${AZBROWSER}">AZBrowser</a> · <a href="${AZNET}">AZNet</a></p>

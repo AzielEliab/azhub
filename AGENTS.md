@@ -17,11 +17,18 @@ This Worker's `/mcp` is a pointer, not a second MCP. Human chrome uses
 `/v1/{op}` (single-segment local ops). `/v1/fraggate/*` and
 `/v1/runtime/*` PROXY to aziel-runtime — they are not local op names.
 
-Live: place, list_modules, tether_declare, tether_list, isolate,
-blank_key_status, health, skill.
+AZHub and AZInterface are **separate software** under **one FragGate
+door**. Never collapse them into one engine.
+
+FragGate live (agents): place_module, region_list, tether_declare,
+tether_cut, tether_list, remove_module, blank_key_status, health, skill.
+
+Human `/v1` also keeps place, list_modules, isolate (same handlers via
+aliases). Do not tell agents to send `op: "place"` through FragGate.
 
 Stub (refuse): recommend, rank, auto_wire, interpret_meaning,
-activate_by_copresence.
+activate_by_copresence, plus FragGate stubs (scorch_remote, auto_unlock,
+ranking, completeness_detect, unlock, complete, completeness, scorch).
 
 Hub must not decide why anything matters. Blank Key geometry without
 intent. Modules remain complete if Hub is removed. Declared tethers

@@ -27,6 +27,16 @@ assert.deepEqual(classifyV1Path("/v1/place"), {
   path: "/v1/place",
   op: "place",
 });
+assert.deepEqual(classifyV1Path("/v1/place_module"), {
+  kind: "local",
+  path: "/v1/place_module",
+  op: "place_module",
+});
+assert.deepEqual(classifyV1Path("/v1/region_list"), {
+  kind: "local",
+  path: "/v1/region_list",
+  op: "region_list",
+});
 assert.equal(localOpFromPath("/v1/fraggate/call"), null);
 assert.equal(localOpFromPath("/v1/blank_key_status"), "blank_key_status");
 assert.equal(mapDoorPath("/v1/runtime/list"), "/v1/fraggate/list");
@@ -87,6 +97,16 @@ try {
   assert.equal(localBody.ok, true);
   assert.equal(localBody.action, "place");
   assert.ok(localBody.receipt);
+
+  const fgReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/place_module", {
+    method: "POST",
+    headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0" },
+    body: JSON.stringify({ slug: "peacelock", x: 80, y: 80, session_id: localBody.session_id }),
+  });
+  const fgRes = await handleRuntimeApi(fgReq, new URL(fgReq.url), {});
+  const fgBody = await fgRes.json();
+  assert.equal(fgBody.ok, true);
+  assert.equal(fgBody.action, "place");
 
   const stubReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/rank", {
     method: "POST",

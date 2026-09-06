@@ -17,6 +17,7 @@ from .meta import (
     AZNET,
     FRAGGATE,
     FRAGGATE_CALL,
+    FRAGGATE_LIVE_OPS,
     FRAGGATE_MCP,
     HOST,
     IDENTITY,
@@ -29,6 +30,7 @@ from .meta import (
     SIGIL,
     SPEC,
     STUB_OPS,
+    UI_LIVE_OPS,
     __version__,
 )
 from .receipts import Ledger
@@ -37,9 +39,17 @@ from .surface import BlankKey
 STUB_MESSAGES = {
     "recommend": "Hub does not recommend. Neutral spatial container only.",
     "rank": "Hub does not rank. Catalog order is alphabetical slug, not worth.",
+    "ranking": "Hub does not rank. Catalog order is alphabetical slug, not worth.",
     "auto_wire": "Hub does not auto-wire. Declare a tether or nothing is connected.",
     "interpret_meaning": "Hub does not interpret meaning. Blank Key geometry has no intent.",
     "activate_by_copresence": "Hub does not activate by co-presence. Placement is not a trigger.",
+    "scorch_remote": "Hub does not remotely scorch. Modules remain complete if Hub is removed.",
+    "scorch": "Hub does not scorch. Blank Key geometry has no wipe.",
+    "auto_unlock": "Hub does not auto-unlock. Blank Key refuses completeness and unlock.",
+    "unlock": "Hub does not unlock. Placement is not a key.",
+    "complete": "Hub does not complete. Modules were already complete.",
+    "completeness": "Hub does not detect completeness. Modules remain complete if Hub is removed.",
+    "completeness_detect": "Hub does not detect completeness. Modules remain complete if Hub is removed.",
 }
 
 
@@ -90,7 +100,11 @@ class Engine:
                 "spec": SPEC,
                 "ops": list(OPS),
                 "live_ops": list(LIVE_OPS),
+                "ui_live_ops": list(UI_LIVE_OPS),
+                "fraggate_live_ops": list(FRAGGATE_LIVE_OPS),
                 "stub_ops": list(STUB_OPS),
+                "separate_software": ["azinterface", "azbrowser", "aznet"],
+                "door": "fraggate",
                 "agent_path": FRAGGATE_CALL,
                 "mcp": FRAGGATE_MCP,
                 "runtime": RUNTIME,
@@ -190,6 +204,36 @@ class Engine:
             )
         else:
             out["display"] = display_of("Isolate refused", out.get("error") or "place first", [])
+        return self._stamp(out, rec)
+
+    def remove_module(self, payload: dict[str, Any]) -> dict[str, Any]:
+        out = self.surface.remove_module(payload)
+        rec = self._receipt("remove_module", {"id": payload.get("id") or payload.get("slug"), "ok": out.get("ok")})
+        if out.get("ok"):
+            mod = out.get("module") or {}
+            out["display"] = display_of(
+                "Removed",
+                "Taken off the Blank Key. Module remains complete.",
+                [("slug", mod.get("slug")), ("dropped", len(out.get("tethers_dropped") or []))],
+            )
+        else:
+            out["display"] = display_of("Remove refused", out.get("error") or "place first", [])
+        return self._stamp(out, rec)
+
+    def tether_cut(self, payload: dict[str, Any]) -> dict[str, Any]:
+        out = self.surface.tether_cut(payload)
+        rec = self._receipt(
+            "tether_cut",
+            {"from": payload.get("from"), "to": payload.get("to"), "ok": out.get("ok")},
+        )
+        if out.get("ok"):
+            out["display"] = display_of(
+                "Tether cut",
+                "Declared corridor removed. Hub did not invent a replacement.",
+                [("cut", len(out.get("tethers_cut") or []))],
+            )
+        else:
+            out["display"] = display_of("Tether cut refused", out.get("error") or "declare first", [])
         return self._stamp(out, rec)
 
     def blank_key_status(self, _payload: dict[str, Any]) -> dict[str, Any]:

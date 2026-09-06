@@ -17,7 +17,8 @@ How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 **Forks are welcome and always allowed.**
 
-AZInterface is a **sibling** product — never collapse Hub into Interface:
+AZInterface is **separate software** under the same FragGate door —
+never collapse Hub into Interface:
 https://github.com/AzielEliab/azinterface
 
 AZBrowser is a **sibling**: https://github.com/AzielEliab/azbrowser
@@ -46,7 +47,7 @@ not AZBrowser, and not AZNet.
 ```bash
 curl -s -A 'Mozilla/5.0' -X POST https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call \
   -H 'content-type: application/json' \
-  -d '{"slug":"azhub","op":"place","payload":{"slug":"azmail","x":80,"y":80}}'
+  -d '{"slug":"azhub","op":"place_module","payload":{"slug":"azmail","x":80,"y":80}}'
 ```
 
 MCP clients already on aziel-runtime call `fraggate_call` with
@@ -68,22 +69,29 @@ Bing, Google Gemini / Vertex, Mistral, Meta AI, Apple Intelligence
 surfaces, Amazon Q tooling, DuckAssist, You.com, Cohere, and other
 MCP/OpenAPI-capable assistants.
 
-## Live ops
+## FragGate live ops (agents)
 
 | Op | What |
 |----|------|
 | `health` | Liveness. Dual-surface banner. |
-| `place` | Bind a module or Lock tile at (x, y). No meaning. |
-| `list_modules` | Placed tiles + alphabetical catalog. Not a ranking. |
+| `place_module` | Bind a module or Lock tile at (x, y). No meaning. UI: Place → `/v1/place`. |
+| `region_list` | Placed tiles + alphabetical catalog. Not a ranking. UI: `list_modules`. |
 | `tether_declare` | Visible corridor. Both ends must already be placed. |
 | `tether_list` | Declared corridors only. |
-| `isolate` | Bound, isolated. Drops tethers. Module stays complete. |
+| `tether_cut` | Cut a declared corridor. |
+| `remove_module` | Take a tile off the Blank Key. Module stays complete. |
 | `blank_key_status` | Geometry without intent. Home / sigil. |
 | `skill` | This skill markdown. |
+
+Human chrome also keeps `place`, `list_modules`, and `isolate` on `/v1`
+(same handlers). `isolate` leaves the tile on the surface. Do not send
+`op: "place"` through FragGate.
 
 ## Stub ops (refuse)
 
 `recommend` · `rank` · `auto_wire` · `interpret_meaning` · `activate_by_copresence`
+· `scorch_remote` · `auto_unlock` · `ranking` · `completeness_detect` · `unlock`
+· `complete` · `completeness` · `scorch`
 
 These return `FG-STUB`. They do not execute.
 
@@ -149,14 +157,16 @@ Parent lists after deploy. Expected URL:
 
 Every control calls a real `/v1` handler (same op agents call). No dead buttons.
 
-| Chrome | Handler | Op |
-|--------|---------|-----|
+| Chrome | Handler | FragGate op |
+|--------|---------|-------------|
 | Home (sigil) | `POST /v1/blank_key_status` | `blank_key_status` / `home` |
-| Drop → Place | `POST /v1/place` | `place` |
+| Drop → Place | `POST /v1/place` | `place_module` |
 | Drop → Tether | `POST /v1/tether_declare` | `tether_declare` |
-| Drop → Isolate | `POST /v1/isolate` | `isolate` |
-| list_modules | `POST /v1/list_modules` | `list_modules` |
+| Drop → Isolate | `POST /v1/isolate` | isolate (UI; tile stays) |
+| Drop → Remove | `POST /v1/remove_module` | `remove_module` |
+| list_modules | `POST /v1/list_modules` | `region_list` |
 | tether_list | `POST /v1/tether_list` | `tether_list` |
+| tether_cut | `POST /v1/tether_cut` | `tether_cut` |
 | FragGate list | `GET /v1/fraggate/list` | PROXY to aziel-runtime |
 | FragGate call | `POST /v1/fraggate/call` | PROXY to aziel-runtime |
 
@@ -164,10 +174,12 @@ Prove locally (after `pip install -e ".[dev]"`):
 
 ```bash
 azhub doctor
-azhub call place --payload '{"slug":"azmail","x":40,"y":40}'
+azhub call place_module --payload '{"slug":"azmail","x":40,"y":40}'
 azhub call place --payload '{"slug":"peacelock","x":200,"y":80}'
 azhub call tether_declare --payload '{"from":"azmail","to":"peacelock"}'
 azhub call isolate --payload '{"slug":"azmail"}'
+azhub call tether_cut --payload '{"from":"azmail","to":"peacelock"}'
+azhub call remove_module --payload '{"slug":"peacelock"}'
 azhub call recommend --payload '{}'
 azhub call blank_key_status
 ```

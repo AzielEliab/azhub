@@ -5,9 +5,10 @@
 **License:** Apache-2.0
 **Date:** September 2026
 
-This paper defines **two products**. They are combined in one
-specification so the boundary is law, not a later argument. They must
-never be collapsed into one Worker, one slug, or one UI.
+This paper defines **two products** — **separate software** under **one
+FragGate door**. They are combined in one specification so the boundary
+is law, not a later argument. They must never be collapsed into one
+Worker, one slug, one UI, or one engine.
 
 | Product | Slug | Role |
 |---------|------|------|
@@ -96,13 +97,18 @@ Catalog listing of `azhub` lands in a sibling aziel-runtime PR.
 
 ## Live ops
 
-`health` `place` `list_modules` `tether_declare` `tether_list`
-`isolate` `blank_key_status` `skill`
+FragGate (agents): `health` `place_module` `region_list` `tether_declare`
+`tether_cut` `tether_list` `remove_module` `blank_key_status` `skill`
+
+Human Worker `/v1` also keeps `place` `list_modules` `isolate` (same
+handlers). `isolate` leaves the tile on the surface. `remove_module`
+takes it off.
 
 ## Stub ops
 
 `recommend` `rank` `auto_wire` `interpret_meaning`
-`activate_by_copresence`
+`activate_by_copresence` `scorch_remote` `auto_unlock` `ranking`
+`completeness_detect` `unlock` `complete` `completeness` `scorch`
 
 Stubs refuse with `FG-STUB`. They are named so they cannot be
 hallucinated as live.

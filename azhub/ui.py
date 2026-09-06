@@ -71,6 +71,7 @@ a{{color:var(--gold)}}
     <button id="btnStatus" type="button">blank_key_status</button>
     <button id="btnList" type="button">list_modules</button>
     <button id="btnTethers" type="button">tether_list</button>
+    <button id="btnCut" type="button">tether_cut</button>
   </div>
   <div id="body">
     <aside id="palette">
@@ -93,7 +94,7 @@ a{{color:var(--gold)}}
       <h2>Receipts</h2>
       <div id="receipts"></div>
       <h2>FragGate</h2>
-      <div class="cite">AI path is FragGate only. This chrome is human software. Sibling products stay separate: AZInterface, AZBrowser, AZNet.</div>
+      <div class="cite">AI path is FragGate only. This chrome is human software. AZInterface, AZBrowser, and AZNet are separate software under one FragGate door.</div>
     </aside>
   </div>
   <div id="status">AZHub {__version__} local · AIH-WP-1.0 · Blank Key · not Interface · 127.0.0.1:{PORT}</div>
@@ -105,6 +106,7 @@ a{{color:var(--gold)}}
     <button type="button" id="actPlace">Place</button>
     <button type="button" id="actTether">Tether to selected</button>
     <button type="button" id="actIsolate">Isolate</button>
+    <button type="button" id="actRemove">Remove</button>
     <button type="button" id="actClose">Close</button>
   </div>
 </div>
@@ -192,6 +194,12 @@ document.getElementById("actIsolate").onclick = async () => {{
   await callOp("place", pending);
   await callOp("isolate", {{ slug: pending.slug }});
 }};
+document.getElementById("actRemove").onclick = async () => {{
+  if (!pending) return;
+  document.getElementById("modal").className = "";
+  await callOp("place", pending);
+  await callOp("remove_module", {{ slug: pending.slug }});
+}};
 function makeTile(t) {{
   const el = document.createElement("div");
   el.className = "tile" + (t.kind === "lock" ? " lock" : "");
@@ -222,6 +230,10 @@ async function boot() {{
   document.getElementById("btnStatus").onclick = () => callOp("blank_key_status", {{}});
   document.getElementById("btnList").onclick = () => callOp("list_modules", {{}});
   document.getElementById("btnTethers").onclick = () => callOp("tether_list", {{}});
+  document.getElementById("btnCut").onclick = () => {{
+    if (!selectedId) return;
+    callOp("tether_cut", {{ id: selectedId }});
+  }};
 }}
 boot();
 </script>
