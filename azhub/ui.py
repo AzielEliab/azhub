@@ -23,7 +23,7 @@ def chrome() -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AZHub — Blank Key</title>
+<title>AZHub — Blank Key · Aziel Eliab</title>
 <style>
 :root{{color-scheme:dark;--bg:#0b0b0b;--gold:#c9a227;--trim:#8a7219;--text:#ffffff;--muted:#d8d0c0;--panel:#101010}}
 *{{box-sizing:border-box}}

@@ -9,6 +9,10 @@ def worker_ui_source() -> str:
     return (ROOT / "workers" / "download-tracker" / "src" / "ui.js").read_text(encoding="utf-8")
 
 
+def worker_runtime_source() -> str:
+    return (ROOT / "workers" / "download-tracker" / "src" / "runtime.js").read_text(encoding="utf-8")
+
+
 def test_local_chrome_has_wired_popup():
     html = chrome()
     assert "draggable" in html
@@ -29,3 +33,15 @@ def test_worker_ui_has_wired_popup():
     assert 'id="actIsolate"' in html
     assert "/v1/place" in html or 'callOp("place"' in html
     assert "azinterface" in html.lower()
+
+
+def test_worker_html_title_includes_aziel_eliab():
+    local = chrome()
+    worker = worker_ui_source()
+    ai = worker_runtime_source()
+    assert "<title>AZHub — Blank Key · Aziel Eliab</title>" in local
+    assert "<title>AZHub — Blank Key · Aziel Eliab</title>" in worker
+    assert "<title>AZHub — AI / MCP · Aziel Eliab</title>" in ai
+    for html in (local, worker, ai):
+        assert "Aziel Eliab" in html
+        assert "Aziel Elroi" not in html
