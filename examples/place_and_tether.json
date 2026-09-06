@@ -1,0 +1,8 @@
+{
+  "place": [
+    {"slug": "azmail", "x": 80, "y": 80},
+    {"slug": "peacelock", "x": 280, "y": 120}
+  ],
+  "tether_declare": {"from": "azmail", "to": "peacelock"},
+  "note": "Declared corridor only. Hub assigned no meaning. Author: Aziel Eliab."
+}

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "AZHub isolated download tracker + hosted Blank Key /v1 + FragGate pointer",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "wrangler": "^4.127.1"
+  }
+}
