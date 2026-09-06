@@ -188,6 +188,67 @@ class BlankKey:
             **self.snapshot(),
         }
 
+    def remove_module(self, payload: dict[str, Any]) -> dict[str, Any]:
+        row = self._resolve(payload.get("id") or payload.get("slug") or payload.get("module"))
+        if not row:
+            return {"ok": False, "error": "tile_not_placed"}
+        dropped = []
+        for tid, tether in list(self.tethers.items()):
+            if tether["from"] == row["id"] or tether["to"] == row["id"]:
+                dropped.append(self.tethers.pop(tid))
+        removed = self.placed.pop(row["id"])
+        return {
+            "ok": True,
+            "action": "remove_module",
+            "module": dict(removed),
+            "tethers_dropped": dropped,
+            "note": "Removed from the Blank Key. Module remains complete. Hub assigned no meaning.",
+            **self.snapshot(),
+        }
+
+    def tether_cut(self, payload: dict[str, Any]) -> dict[str, Any]:
+        tid = str(payload.get("id") or payload.get("tether") or "").strip()
+        if tid and tid in self.tethers:
+            cut = [self.tethers.pop(tid)]
+            return {
+                "ok": True,
+                "action": "tether_cut",
+                "tethers_cut": cut,
+                "note": "Declared corridor cut. Hub did not invent a replacement.",
+                **self.snapshot(),
+            }
+        src = self._resolve(payload.get("from") or payload.get("source") or payload.get("a"))
+        dst = self._resolve(payload.get("to") or payload.get("target") or payload.get("b"))
+        if src and dst:
+            pair = tuple(sorted((src["id"], dst["id"])))
+            cut = []
+            for key, row in list(self.tethers.items()):
+                if tuple(sorted((row["from"], row["to"]))) == pair:
+                    cut.append(self.tethers.pop(key))
+            if cut:
+                return {
+                    "ok": True,
+                    "action": "tether_cut",
+                    "tethers_cut": cut,
+                    "note": "Declared corridor cut. Hub did not invent a replacement.",
+                    **self.snapshot(),
+                }
+            return {"ok": False, "error": "tether_not_declared", "from": src["slug"], "to": dst["slug"], **self.snapshot()}
+        row = self._resolve(payload.get("slug") or payload.get("module") or payload.get("id"))
+        if row:
+            cut = []
+            for key, tether in list(self.tethers.items()):
+                if tether["from"] == row["id"] or tether["to"] == row["id"]:
+                    cut.append(self.tethers.pop(key))
+            return {
+                "ok": True,
+                "action": "tether_cut",
+                "tethers_cut": cut,
+                "note": "Declared corridors cut for that tile. Hub did not invent a replacement.",
+                **self.snapshot(),
+            }
+        return {"ok": False, "error": "tether_not_declared", **self.snapshot()}
+
     def blank_key_status(self) -> dict[str, Any]:
         return {
             "ok": True,

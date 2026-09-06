@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from .engine import Engine, LIVE_OPS, STUB_OPS
-from .meta import LIMITATION, SPEC, __version__
+from .meta import FRAGGATE_LIVE_OPS, LIMITATION, SPEC, __version__
 from .receipts import Ledger
 
 
@@ -44,6 +44,17 @@ def doctor() -> int:
     checks.append(("isolate", bool(iso.get("ok")) and (iso.get("module") or {}).get("isolated") is True))
     checks.append(("isolate_drops_tether", len(iso.get("tethers_dropped") or []) == 1))
     checks.append(("module_still_complete", iso.get("modules_remain_complete_if_hub_removed") is True))
+
+    placed_fg = eng.call("place_module", {"slug": "peacelock", "x": 80, "y": 80})
+    checks.append(("place_module_alias", bool(placed_fg.get("ok"))))
+    listed_fg = eng.call("region_list", {})
+    checks.append(("region_list_alias", bool(listed_fg.get("ok")) and listed_fg.get("ranked") is False))
+    cut = eng.call("tether_cut", {"from": "azbrowser", "to": "aznet"})
+    # siblings were placed earlier; no tether yet — refuse is still a real handler
+    checks.append(("tether_cut_handler", cut.get("action") == "tether_cut" or cut.get("error") == "tether_not_declared"))
+    removed = eng.call("remove_module", {"slug": "peacelock"})
+    checks.append(("remove_module", bool(removed.get("ok")) and removed.get("action") == "remove_module"))
+    checks.append(("fraggate_live_ops", set(FRAGGATE_LIVE_OPS) <= set(h.get("fraggate_live_ops") or LIVE_OPS)))
 
     status = eng.blank_key_status({})
     checks.append(("blank_key", status.get("blank_key") is True and status.get("intent") is None))

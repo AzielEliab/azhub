@@ -32,7 +32,8 @@ GODLOCK = "https://godlock.uk/"
 AUTHOR_SITE = "https://www.azieleliab.com"
 GITHUB = "https://github.com/AzielEliab/azhub"
 
-LIVE_OPS = (
+# Human Worker chrome verbs (labels match /v1 routes).
+UI_LIVE_OPS = (
     "health",
     "place",
     "list_modules",
@@ -43,7 +44,22 @@ LIVE_OPS = (
     "skill",
 )
 
-STUB_OPS = (
+# Public FragGate door allowlist (aziel-runtime catalog). One door.
+FRAGGATE_LIVE_OPS = (
+    "health",
+    "skill",
+    "region_list",
+    "place_module",
+    "remove_module",
+    "tether_declare",
+    "tether_cut",
+    "tether_list",
+    "blank_key_status",
+)
+
+LIVE_OPS = tuple(dict.fromkeys(UI_LIVE_OPS + FRAGGATE_LIVE_OPS))
+
+UI_STUB_OPS = (
     "recommend",
     "rank",
     "auto_wire",
@@ -51,15 +67,33 @@ STUB_OPS = (
     "activate_by_copresence",
 )
 
+FRAGGATE_STUB_OPS = (
+    "scorch_remote",
+    "auto_unlock",
+    "ranking",
+    "completeness_detect",
+    "unlock",
+    "complete",
+    "completeness",
+    "rank",
+    "scorch",
+)
+
+STUB_OPS = tuple(dict.fromkeys(UI_STUB_OPS + FRAGGATE_STUB_OPS))
+
 # Home is the everblooming-sigil return to Blank Key. Not a ranking surface.
+# FragGate catalog names alias onto the same handlers as the Worker chrome.
 ALIASES = {
     "home": "blank_key_status",
     "status": "blank_key_status",
     "blank_key": "blank_key_status",
     "modules": "list_modules",
     "list": "list_modules",
+    "region_list": "list_modules",
     "tether": "tether_declare",
     "bind": "place",
+    "place_module": "place",
+    "cut": "tether_cut",
 }
 
 OPS = LIVE_OPS + STUB_OPS

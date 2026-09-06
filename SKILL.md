@@ -18,7 +18,8 @@ Author: **Aziel Eliab** only.
 
 **THIS IS NOT:** AZInterface, AZBrowser, AZNet, a recommender, a ranker,
 a meaning engine, or activation-by-co-presence. Never collapse Hub into
-Interface.
+Interface. AZHub and AZInterface are **separate software** under **one
+FragGate door**.
 
 Always send `User-Agent: Mozilla/5.0`. Cloudflare Workers may 403 an empty agent.
 
@@ -41,21 +42,29 @@ second MCP. AI / MCP path is FragGate only.
 `display.summary`, and `display.fields` in the AI client, then take the
 next input. No technical MCP UI is required for the human.
 
-## Live ops (UI action = MCP / FragGate op)
+## FragGate live ops (agents — use these names)
 
-| UI chrome | op |
-|-----------|-----|
-| Drop → Place | `place` |
-| Palette / list | `list_modules` |
-| Drop → Tether | `tether_declare` |
-| Corridor list | `tether_list` |
-| Drop → Isolate | `isolate` |
-| Home (everblooming sigil) | `blank_key_status` / `home` |
-| Liveness / skill | `health` `skill` |
+| FragGate op | Worker UI chrome | `/v1` |
+|-------------|------------------|-------|
+| `place_module` | Drop → Place | `/v1/place` (alias) |
+| `region_list` | Palette / list_modules | `/v1/list_modules` (alias) |
+| `tether_declare` | Drop → Tether | `/v1/tether_declare` |
+| `tether_list` | tether_list | `/v1/tether_list` |
+| `tether_cut` | tether_cut | `/v1/tether_cut` |
+| `remove_module` | Drop → Remove | `/v1/remove_module` |
+| `blank_key_status` | Home (everblooming sigil) | `/v1/blank_key_status` |
+| `health` `skill` | Liveness / skill | `/v1/health` `/v1/skill` |
+
+Human chrome also keeps `isolate` on `/v1/isolate` (tile stays; bound and
+isolated). `remove_module` takes the tile off. Do **not** send
+`op: "place"` through FragGate — that is `FG-UNKNOWN-OP`. Use
+`place_module`.
 
 ## Stub ops (refuse)
 
 `recommend` `rank` `auto_wire` `interpret_meaning` `activate_by_copresence`
+`scorch_remote` `auto_unlock` `ranking` `completeness_detect` `unlock`
+`complete` `completeness` `scorch`
 
 These return `FG-STUB`. Hub will not execute them.
 
@@ -90,7 +99,7 @@ MCP/OpenAPI-capable assistants — **through FragGate only**.
 ```bash
 curl -s -A 'Mozilla/5.0' -X POST https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call \
   -H 'content-type: application/json' \
-  -d '{"slug":"azhub","op":"place","payload":{"slug":"azmail","x":80,"y":80}}'
+  -d '{"slug":"azhub","op":"place_module","payload":{"slug":"azmail","x":80,"y":80}}'
 curl -s -A 'Mozilla/5.0' -X POST https://azhub-download-tracker.vibelock.workers.dev/v1/blank_key_status \
   -H 'content-type: application/json' \
   -d '{}'

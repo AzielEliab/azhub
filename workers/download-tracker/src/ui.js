@@ -58,6 +58,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     <button id="btnStatus" type="button">blank_key_status</button>
     <button id="btnList" type="button">list_modules</button>
     <button id="btnTethers" type="button">tether_list</button>
+    <button id="btnCut" type="button">tether_cut</button>
   </div>
   <div id="body">
     <aside id="palette">
@@ -88,7 +89,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
         AI path is FragGate only: <code>POST /v1/fraggate/call</code> slug=<b>azhub</b><br>
         Door paths proxy to aziel-runtime. Local ops are <code>/v1/{op}</code> only.<br>
         <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a><br>
-        Separate: <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
+        Separate software (one FragGate door): <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
         <a href="https://github.com/AzielEliab/azbrowser">AZBrowser</a> ·
         <a href="https://github.com/AzielEliab/aznet">AZNet</a>
       </div>
@@ -106,6 +107,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     <button type="button" id="actPlace">Place</button>
     <button type="button" id="actTether">Tether to selected</button>
     <button type="button" id="actIsolate">Isolate</button>
+    <button type="button" id="actRemove">Remove</button>
     <button type="button" id="actClose">Close</button>
   </div>
 </div>
@@ -196,6 +198,12 @@ document.getElementById("actIsolate").onclick = async () => {
   await callOp("place", pending);
   await callOp("isolate", { slug: pending.slug });
 };
+document.getElementById("actRemove").onclick = async () => {
+  if (!pending) return;
+  document.getElementById("modal").className = "";
+  await callOp("place", pending);
+  await callOp("remove_module", { slug: pending.slug });
+};
 function makeTile(t) {
   const el = document.createElement("div");
   el.className = "tile" + (t.kind === "lock" ? " lock" : "");
@@ -226,6 +234,10 @@ async function boot() {
   document.getElementById("btnStatus").onclick = () => callOp("blank_key_status", {});
   document.getElementById("btnList").onclick = () => callOp("list_modules", {});
   document.getElementById("btnTethers").onclick = () => callOp("tether_list", {});
+  document.getElementById("btnCut").onclick = () => {
+    if (!selectedId) return;
+    callOp("tether_cut", { id: selectedId });
+  };
   fetch("/v1/fraggate/list", { headers: { "user-agent": "Mozilla/5.0" } }).then(r => r.json()).then(j => {
     const ops = (j.allowlist && j.allowlist.azhub) || (j.result && j.result.allowlist && j.result.allowlist.azhub) || [];
     const el = document.createElement("div");

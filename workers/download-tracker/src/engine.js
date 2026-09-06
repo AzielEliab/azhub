@@ -20,7 +20,7 @@ export const AZNET = "https://github.com/AzielEliab/aznet";
 export const LIMITATION =
   "THIS IS: AZHub — a neutral spatial container / Blank Key (AIH-WP-1.0). Place, tether, and isolate modules. Declared tethers only (visible corridors). THIS IS NOT: AZInterface, AZBrowser, AZNet, a recommender, a ranker, a meaning engine, or activation-by-co-presence. Hub does not decide why anything matters. Blank Key geometry has no intent. Modules remain complete if Hub is removed. No helpful auto-wiring. Advisory only. Author: Aziel Eliab only.";
 
-export const LIVE_OPS = Object.freeze([
+export const UI_LIVE_OPS = Object.freeze([
   "health",
   "place",
   "list_modules",
@@ -31,13 +31,42 @@ export const LIVE_OPS = Object.freeze([
   "skill",
 ]);
 
-export const STUB_OPS = Object.freeze([
+/** Public FragGate door allowlist. One door; AZHub is software under it. */
+export const FRAGGATE_LIVE_OPS = Object.freeze([
+  "health",
+  "skill",
+  "region_list",
+  "place_module",
+  "remove_module",
+  "tether_declare",
+  "tether_cut",
+  "tether_list",
+  "blank_key_status",
+]);
+
+export const LIVE_OPS = Object.freeze([...new Set([...UI_LIVE_OPS, ...FRAGGATE_LIVE_OPS])]);
+
+export const UI_STUB_OPS = Object.freeze([
   "recommend",
   "rank",
   "auto_wire",
   "interpret_meaning",
   "activate_by_copresence",
 ]);
+
+export const FRAGGATE_STUB_OPS = Object.freeze([
+  "scorch_remote",
+  "auto_unlock",
+  "ranking",
+  "completeness_detect",
+  "unlock",
+  "complete",
+  "completeness",
+  "rank",
+  "scorch",
+]);
+
+export const STUB_OPS = Object.freeze([...new Set([...UI_STUB_OPS, ...FRAGGATE_STUB_OPS])]);
 
 export const OPS = Object.freeze([...LIVE_OPS, ...STUB_OPS]);
 
@@ -47,16 +76,27 @@ export const ALIASES = Object.freeze({
   blank_key: "blank_key_status",
   modules: "list_modules",
   list: "list_modules",
+  region_list: "list_modules",
   tether: "tether_declare",
   bind: "place",
+  place_module: "place",
+  cut: "tether_cut",
 });
 
 export const STUB_MESSAGES = Object.freeze({
   recommend: "Hub does not recommend. Neutral spatial container only.",
   rank: "Hub does not rank. Catalog order is alphabetical slug, not worth.",
+  ranking: "Hub does not rank. Catalog order is alphabetical slug, not worth.",
   auto_wire: "Hub does not auto-wire. Declare a tether or nothing is connected.",
   interpret_meaning: "Hub does not interpret meaning. Blank Key geometry has no intent.",
   activate_by_copresence: "Hub does not activate by co-presence. Placement is not a trigger.",
+  scorch_remote: "Hub does not remotely scorch. Modules remain complete if Hub is removed.",
+  scorch: "Hub does not scorch. Blank Key geometry has no wipe.",
+  auto_unlock: "Hub does not auto-unlock. Blank Key refuses completeness and unlock.",
+  unlock: "Hub does not unlock. Placement is not a key.",
+  complete: "Hub does not complete. Modules were already complete.",
+  completeness: "Hub does not detect completeness. Modules remain complete if Hub is removed.",
+  completeness_detect: "Hub does not detect completeness. Modules remain complete if Hub is removed.",
 });
 
 export const SEPARATE_PRODUCTS = Object.freeze(["azinterface", "azbrowser", "aznet"]);
@@ -285,21 +325,31 @@ PROXY to aziel-runtime. \`GET|POST /mcp\` here is a pointer, not a second MCP.
 
 **Human UI stays on this Worker.** AI path is FragGate + this OpenAPI.
 
-## Live ops
+AZHub and AZInterface are **separate software** under **one FragGate door**.
+Never collapse them into one engine.
 
-| UI chrome | op |
-|-----------|-----|
-| Drop → Place | \`place\` |
-| Palette / list | \`list_modules\` |
-| Drop → Tether | \`tether_declare\` |
-| Corridor list | \`tether_list\` |
-| Drop → Isolate | \`isolate\` |
-| Home (everblooming sigil) | \`blank_key_status\` / \`home\` |
-| Liveness / skill | \`health\` \`skill\` |
+## FragGate live ops (agents)
+
+| op | UI chrome |
+|----|-----------|
+| \`place_module\` | Drop → Place (\`/v1/place\`) |
+| \`region_list\` | Palette / list (\`/v1/list_modules\`) |
+| \`tether_declare\` | Drop → Tether |
+| \`tether_list\` | Corridor list |
+| \`tether_cut\` | Cut a declared corridor |
+| \`remove_module\` | Take a tile off the Blank Key |
+| \`blank_key_status\` | Home (everblooming sigil) |
+| \`health\` \`skill\` | Liveness / skill |
+
+Human chrome also keeps \`place\`, \`list_modules\`, and \`isolate\`
+on \`/v1\` (same handlers via aliases). \`isolate\` stays on the tile;
+\`remove_module\` takes it off. Agents must use the FragGate names.
 
 ## Stub ops (refuse)
 
 \`recommend\` \`rank\` \`auto_wire\` \`interpret_meaning\` \`activate_by_copresence\`
+\`scorch_remote\` \`auto_unlock\` \`ranking\` \`completeness_detect\` \`unlock\`
+\`complete\` \`completeness\` \`scorch\`
 
 Works with ChatGPT (GPT Actions / OpenAI), Grok (xAI), Venice, Claude
 (Anthropic), Cursor (MCP), Glama (MCP), Perplexity, Microsoft Copilot /
@@ -316,7 +366,7 @@ UI is required for the human.
 \`\`\`bash
 curl -s -A 'Mozilla/5.0' -X POST https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call \\
   -H 'content-type: application/json' \\
-  -d '{"slug":"azhub","op":"place","payload":{"slug":"azmail","x":80,"y":80}}'
+  -d '{"slug":"azhub","op":"place_module","payload":{"slug":"azmail","x":80,"y":80}}'
 curl -s -A 'Mozilla/5.0' -X POST https://azhub-download-tracker.vibelock.workers.dev/v1/blank_key_status \\
   -H 'content-type: application/json' \\
   -d '{}'
@@ -390,7 +440,10 @@ export async function dispatch(op, payload, sessionId) {
         spec: SPEC,
         ops: [...OPS],
         live_ops: [...LIVE_OPS],
+        ui_live_ops: [...UI_LIVE_OPS],
+        fraggate_live_ops: [...FRAGGATE_LIVE_OPS],
         stub_ops: [...STUB_OPS],
+        separate_software: [...SEPARATE_PRODUCTS],
         agent_path: FRAGGATE_CALL,
         mcp: FRAGGATE_MCP,
         runtime: RUNTIME,
@@ -529,6 +582,79 @@ export async function dispatch(op, payload, sessionId) {
       { id: row.id, ok: true },
       displayOf("Isolated", "Bound, isolated. Module remains complete.", [["slug", row.slug], ["dropped", dropped.length]]),
     );
+  }
+
+  if (name === "remove_module") {
+    const row = resolve(session, body.id || body.slug || body.module);
+    if (!row) {
+      return stamp({ ok: false, error: "tile_not_placed", ...snapshot(session) }, "remove_module", { ok: false }, displayOf("Remove refused", "place first", []));
+    }
+    const dropped = [];
+    for (const [tid, tether] of Object.entries(session.tethers)) {
+      if (tether.from === row.id || tether.to === row.id) {
+        dropped.push(session.tethers[tid]);
+        delete session.tethers[tid];
+      }
+    }
+    delete session.placed[row.id];
+    return stamp(
+      { ok: true, action: "remove_module", module: { ...row }, tethers_dropped: dropped, note: "Removed from the Blank Key. Module remains complete. Hub assigned no meaning.", ...snapshot(session) },
+      "remove_module",
+      { id: row.id, ok: true },
+      displayOf("Removed", "Taken off the Blank Key. Module remains complete.", [["slug", row.slug], ["dropped", dropped.length]]),
+    );
+  }
+
+  if (name === "tether_cut") {
+    const tid = String(body.id || body.tether || "").trim();
+    if (tid && session.tethers[tid]) {
+      const cut = [session.tethers[tid]];
+      delete session.tethers[tid];
+      return stamp(
+        { ok: true, action: "tether_cut", tethers_cut: cut, note: "Declared corridor cut. Hub did not invent a replacement.", ...snapshot(session) },
+        "tether_cut",
+        { id: tid, ok: true },
+        displayOf("Tether cut", "Declared corridor removed. Hub did not invent a replacement.", [["cut", cut.length]]),
+      );
+    }
+    const src = resolve(session, body.from || body.source || body.a);
+    const dst = resolve(session, body.to || body.target || body.b);
+    if (src && dst) {
+      const pair = [src.id, dst.id].sort().join("|");
+      const cut = [];
+      for (const [key, tether] of Object.entries(session.tethers)) {
+        if ([tether.from, tether.to].sort().join("|") === pair) {
+          cut.push(tether);
+          delete session.tethers[key];
+        }
+      }
+      if (cut.length) {
+        return stamp(
+          { ok: true, action: "tether_cut", tethers_cut: cut, note: "Declared corridor cut. Hub did not invent a replacement.", ...snapshot(session) },
+          "tether_cut",
+          { from: src.slug, to: dst.slug, ok: true },
+          displayOf("Tether cut", "Declared corridor removed. Hub did not invent a replacement.", [["cut", cut.length]]),
+        );
+      }
+      return stamp({ ok: false, error: "tether_not_declared", from: src.slug, to: dst.slug, ...snapshot(session) }, "tether_cut", { ok: false }, displayOf("Tether cut refused", "declare first", []));
+    }
+    const row = resolve(session, body.slug || body.module || body.id);
+    if (row) {
+      const cut = [];
+      for (const [key, tether] of Object.entries(session.tethers)) {
+        if (tether.from === row.id || tether.to === row.id) {
+          cut.push(tether);
+          delete session.tethers[key];
+        }
+      }
+      return stamp(
+        { ok: true, action: "tether_cut", tethers_cut: cut, note: "Declared corridors cut for that tile. Hub did not invent a replacement.", ...snapshot(session) },
+        "tether_cut",
+        { slug: row.slug, ok: true },
+        displayOf("Tether cut", "Declared corridor removed. Hub did not invent a replacement.", [["cut", cut.length]]),
+      );
+    }
+    return stamp({ ok: false, error: "tether_not_declared", ...snapshot(session) }, "tether_cut", { ok: false }, displayOf("Tether cut refused", "declare first", []));
   }
 
   if (name === "blank_key_status") {

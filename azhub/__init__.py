@@ -19,6 +19,7 @@ from .meta import (
     AZNET_WORKER,
     FRAGGATE,
     FRAGGATE_CALL,
+    FRAGGATE_LIVE_OPS,
     FRAGGATE_MCP,
     GITHUB,
     GODLOCK,
@@ -29,6 +30,7 @@ from .meta import (
     RUNTIME,
     SIGIL,
     SPEC,
+    UI_LIVE_OPS,
     __version__,
 )
 from .receipts import Ledger, receipt_hash
@@ -49,6 +51,7 @@ __all__ = [
     "BlankKey",
     "FRAGGATE",
     "FRAGGATE_CALL",
+    "FRAGGATE_LIVE_OPS",
     "FRAGGATE_MCP",
     "GITHUB",
     "GODLOCK",
@@ -63,6 +66,7 @@ __all__ = [
     "SIGIL",
     "SPEC",
     "STUB_OPS",
+    "UI_LIVE_OPS",
     "__author__",
     "__version__",
     "dispatch",
