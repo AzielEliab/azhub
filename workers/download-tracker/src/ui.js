@@ -39,6 +39,10 @@ h1{font-size:16px;color:var(--gold);font-weight:500;margin:0}
 h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin:14px 0 8px}
 .banner{border:1px solid var(--trim);background:#241c0d;color:#f0d78c;padding:10px;border-radius:8px;margin-bottom:12px}
 .receipt,.cite{font-family:ui-monospace,monospace;font-size:11px;border-bottom:1px solid #2a2a2a;padding:6px 0;word-break:break-all}
+#nodes{display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid var(--gold);background:#0f0f0f;flex-wrap:wrap;color:var(--muted);font-size:12px}
+#nodes .off{color:var(--gold)}
+#nodes .on{color:var(--gold)}
+#nodesList{flex:1;min-width:12rem}
 #status{border-top:1px solid var(--gold);padding:6px 10px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);align-items:center;justify-content:center;z-index:20}
 #modal.on{display:flex}
@@ -59,6 +63,12 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     <button id="btnList" type="button">list_modules</button>
     <button id="btnTethers" type="button">tether_list</button>
     <button id="btnCut" type="button">tether_cut</button>
+  </div>
+  <div id="nodes" aria-live="polite">
+    <span class="badge">Live Nodes</span>
+    <span id="nodesState" class="off">Mesh OFF</span>
+    <span id="nodesRollup"></span>
+    <span id="nodesList">Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -88,7 +98,8 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
       <div class="cite">
         AI path is FragGate only: <code>POST /v1/fraggate/call</code> slug=<b>azhub</b><br>
         Door paths proxy to aziel-runtime. Local ops are <code>/v1/{op}</code> only.<br>
-        <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a><br>
+        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Default OFF. Not a Node Gate. Not a publish path.<br>
+        <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a> · <a href="/v1/mesh">/v1/mesh</a><br>
         Separate software (one FragGate door): <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
         <a href="https://github.com/AzielEliab/azbrowser">AZBrowser</a> ·
         <a href="https://github.com/AzielEliab/aznet">AZNet</a>
@@ -245,6 +256,103 @@ async function boot() {
     el.textContent = "FragGate door proxied. azhub live ops listed: " + ops.length + " (catalog listing may land in a sibling runtime PR).";
     document.getElementById("side").appendChild(el);
   }).catch(() => {});
+  meshBoot();
+}
+const MESH_PRODUCT = "azhub";
+const MESH_LABEL = "AZHub";
+let meshNodeId = "";
+let meshBeatAt = 0;
+function meshRollup(j) {
+  if (j && j.rollup && typeof j.rollup === "object") {
+    const live = Number(j.rollup.live);
+    const locked = Number(j.rollup.locked);
+    const isolated = Number(j.rollup.isolated);
+    if ([live, locked, isolated].some(Number.isFinite)) {
+      return { live: Number.isFinite(live) ? live : 0, locked: Number.isFinite(locked) ? locked : 0, isolated: Number.isFinite(isolated) ? isolated : 0 };
+    }
+  }
+  const nodes = (j && j.nodes) || [];
+  if (!nodes.length) return null;
+  let live = 0, locked = 0, isolated = 0, tagged = false;
+  nodes.forEach(n => {
+    const state = String((n && (n.state || n.status || n.mode)) || "").toLowerCase();
+    if (!n) return;
+    if (n.isolated === true || state === "isolated") { isolated += 1; tagged = true; }
+    else if (n.locked === true || n.kind === "lock" || state === "locked") { locked += 1; tagged = true; }
+    else if (state === "live" || n.live === true || n.product) { live += 1; tagged = true; }
+  });
+  return tagged ? { live, locked, isolated } : null;
+}
+function paintMesh(j) {
+  const enabled = !!(j && j.enabled);
+  const stateEl = document.getElementById("nodesState");
+  const rollEl = document.getElementById("nodesRollup");
+  const listEl = document.getElementById("nodesList");
+  if (!stateEl || !rollEl || !listEl) return;
+  if (!enabled) {
+    stateEl.textContent = "Mesh OFF";
+    stateEl.className = "off";
+    rollEl.textContent = "";
+    listEl.textContent = "Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.";
+    meshNodeId = "";
+    return;
+  }
+  stateEl.textContent = "Mesh ON";
+  stateEl.className = "on";
+  const roll = meshRollup(j);
+  rollEl.textContent = roll
+    ? ("live " + roll.live + " · locked " + roll.locked + " · isolated " + roll.isolated)
+    : ((j.live_nodes || 0) + " live");
+  const products = j.products_present || j.products || [];
+  const nodes = j.nodes || [];
+  const labels = nodes.length
+    ? nodes.map(n => (n && (n.label || n.product || n.node_id)) || "").filter(Boolean)
+    : products;
+  listEl.textContent = labels.length ? labels.join(" · ") : "No live nodes.";
+}
+async function meshJson(path, init) {
+  const headers = { "user-agent": "Mozilla/5.0" };
+  if (init && init.method && init.method !== "GET") headers["content-type"] = "application/json";
+  const r = await fetch(path, Object.assign({ headers }, init || {}));
+  return r.json();
+}
+async function meshTick() {
+  let status;
+  try { status = await meshJson("/v1/mesh/status"); } catch { return; }
+  let view = status;
+  try {
+    const extra = await meshJson("/v1/mesh/nodes");
+    if (extra && extra.nodes) view = Object.assign({}, status, extra);
+  } catch { /* status is enough */ }
+  paintMesh(view);
+  if (!view || !view.enabled) return;
+  const now = Date.now();
+  if (!meshNodeId) {
+    try {
+      const joined = await meshJson("/v1/mesh/join", { method: "POST", body: JSON.stringify({ product: MESH_PRODUCT, label: MESH_LABEL }) });
+      meshNodeId = (joined.session && joined.session.node_id) || (joined.node && joined.node.node_id) || "";
+      meshBeatAt = now;
+      if (joined && (joined.nodes || joined.live_nodes != null)) paintMesh(joined);
+    } catch { /* no auto-heal */ }
+    return;
+  }
+  if (now - meshBeatAt >= 60000) {
+    try {
+      const hb = await meshJson("/v1/mesh/heartbeat", { method: "POST", body: JSON.stringify({ node_id: meshNodeId }) });
+      meshBeatAt = now;
+      if (hb && hb.ok === false && hb.code === "MESH-UNKNOWN-NODE") meshNodeId = "";
+      else if (hb && (hb.nodes || hb.live_nodes != null)) paintMesh(hb);
+    } catch { /* no auto-heal */ }
+  }
+}
+function meshBoot() {
+  meshTick();
+  setInterval(meshTick, 20000);
+  const leave = () => {
+    if (!meshNodeId) return;
+    fetch("/v1/mesh/leave", { method: "POST", headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0" }, body: JSON.stringify({ node_id: meshNodeId }), keepalive: true }).catch(() => {});
+  };
+  window.addEventListener("pagehide", leave);
 }
 boot();
 </script>

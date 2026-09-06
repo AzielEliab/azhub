@@ -320,8 +320,11 @@ body \`{"slug":"azhub","op":"<op>","payload":{}}\`
 Same door as MCP \`fraggate_call\` (\`slug=azhub\`). Kernel:
 https://github.com/AzielEliab/fraggate. Catalog listing lands in a
 sibling aziel-runtime PR. Human chrome uses this Worker \`/v1/{op}\`
-(single-segment local ops only). \`/v1/fraggate/*\` and \`/v1/runtime/*\`
-PROXY to aziel-runtime. \`GET|POST /mcp\` here is a pointer, not a second MCP.
+(single-segment local ops only). \`/v1/fraggate/*\`, \`/v1/runtime/*\`,
+and \`/v1/mesh/*\` PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS
+fallback). Suite mesh default OFF. Not a Node Gate. Not anonymity.
+Anon-broadcast is not a publish path. \`GET|POST /mcp\` here is a
+pointer, not a second MCP.
 
 **Human UI stays on this Worker.** AI path is FragGate + this OpenAPI.
 
