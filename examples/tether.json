@@ -1,0 +1,10 @@
+{
+  "from": "mod-example-a",
+  "to": "mod-example-b",
+  "scope": "session",
+  "cuttable": true,
+  "corridor": "visible",
+  "declared": true,
+  "auto": false,
+  "format": "AIH-WP-1.0"
+}
