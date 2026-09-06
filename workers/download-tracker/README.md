@@ -15,6 +15,7 @@ URL pattern after deploy (workers.dev + account subdomain, same as sibling produ
 - `GET /v1/*` — health/skill (does **not** increment downloads)
 - `POST /v1/{op}` — human UI backend; single-segment local ops only
 - `/v1/fraggate/*` and `/v1/runtime/*` — PROXY to aziel-runtime FragGate door
+- `/v1/mesh/*` — PROXY suite node mesh (AZIEL_RUNTIME or HTTPS fallback). Default OFF. Live Nodes strip on `/`. Not a Node Gate. Anon-broadcast is not a publish path.
 - `/robots.txt` `/sitemap.xml` `/llms.txt` `/cite.json`
 
 KV binding `DOWNLOADS` (create `AZHUB_DOWNLOADS` on first deploy; placeholder `000…` is OK until parent deploys). Account `ac575a9b822bea2bed97d0ab73aed238`.

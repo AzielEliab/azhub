@@ -33,9 +33,11 @@ Python 3.10+. Engine is stdlib only. pytest is the dev extra.
 7. **Do not mix the download tracker** with any other product's Worker
    or KV. Namespace `AZHUB_DOWNLOADS` only.
 8. **Public identity is Aziel Eliab only.**
-9. **Door vs local op.** `/v1/fraggate/*` and `/v1/runtime/*` PROXY to
-   aziel-runtime. Local ops are `/v1/{op}` only. Never treat
-   `fraggate/call` as a local op name.
+9. **Door vs local op.** `/v1/fraggate/*`, `/v1/runtime/*`, and
+   `/v1/mesh/*` PROXY to aziel-runtime. Local ops are `/v1/{op}` only.
+   Never treat `fraggate/call` or `mesh` as a local op name. Suite mesh
+   stays OFF until runtime enable. No Node Gate. No auto-heal.
+   Anon-broadcast is not a publish path.
 10. New behavior needs a test that fails without the change.
 
 ## Where to change things

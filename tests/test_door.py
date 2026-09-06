@@ -18,6 +18,17 @@ def test_runtime_aliases_map_to_fraggate():
     assert local_op_from_path("/v1/runtime/list") is None
 
 
+def test_mesh_is_door_not_local_op():
+    for path in ("/v1/mesh", "/v1/mesh/status", "/v1/mesh/nodes", "/v1/mesh/join"):
+        hit = classify_v1_path(path)
+        assert hit["kind"] == "door", path
+        assert hit["originPath"] == path.rstrip("/")
+        assert local_op_from_path(path) is None
+    assert map_door_path("/v1/mesh/status") == "/v1/mesh/status"
+    assert door_target_url("/v1/mesh/status") == RUNTIME.rstrip("/") + "/v1/mesh/status"
+    assert local_op_from_path("/v1/mesh") is None
+
+
 def test_local_ops_are_single_segment_only():
     assert classify_v1_path("/v1/place") == {
         "kind": "local",

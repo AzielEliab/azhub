@@ -34,9 +34,12 @@ POST https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call
 Same door as the `fraggate_call` MCP tool (`slug=azhub`). Kernel:
 https://github.com/AzielEliab/fraggate. Catalog listing lands in a
 sibling aziel-runtime PR. Human chrome uses this Worker's `/v1/{op}`
-(single-segment local ops). `/v1/fraggate/*` and `/v1/runtime/*` PROXY
-to aziel-runtime. `GET|POST /mcp` on this host is a **pointer**, not a
-second MCP. AI / MCP path is FragGate only.
+(single-segment local ops). `/v1/fraggate/*`, `/v1/runtime/*`, and
+`/v1/mesh/*` PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback).
+Suite mesh default OFF until runtime enable. Not a Node Gate. Not
+anonymity. Anon-broadcast is not a publish path. `GET|POST /mcp` on
+this host is a **pointer**, not a second MCP. AI / MCP path is FragGate
+only.
 
 **Human UI stays on this Worker.** Agents display `display.title`,
 `display.summary`, and `display.fields` in the AI client, then take the
@@ -85,6 +88,8 @@ Host: `https://azhub-download-tracker.vibelock.workers.dev`
 | GET | `/v1/fraggate/list` | PROXY to aziel-runtime FragGate list. |
 | POST | `/v1/fraggate/call` | PROXY to aziel-runtime FragGate call. |
 | GET/POST | `/v1/runtime/*` | PROXY aliases (`list`/`call` → FragGate). |
+| GET | `/v1/mesh` `/v1/mesh/status` `/v1/mesh/nodes` | PROXY suite mesh (default OFF). |
+| POST | `/v1/mesh/*` | PROXY join/heartbeat/leave/enable/disable/broadcast (hash receipt only; not a publish path). |
 | GET | `/download` | Counted tarball. |
 | GET | `/count` | `{views, downloads, total}` |
 

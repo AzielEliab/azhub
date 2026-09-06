@@ -40,6 +40,32 @@ def test_worker_ui_has_wired_popup():
     assert "azinterface" in html.lower()
 
 
+def test_live_nodes_strip_and_mesh_law():
+    local = chrome()
+    worker = worker_ui_source()
+    runtime = worker_runtime_source()
+    for html in (local, worker):
+        assert "Live Nodes" in html
+        assert "Mesh OFF" in html
+        assert 'id="nodes"' in html
+        assert "/v1/mesh/status" in html
+        assert "/v1/mesh/join" in html
+        assert "product: MESH_PRODUCT" in html or '"azhub"' in html
+        assert "no auto-heal" in html
+        assert "Not a Node Gate" in html or "not a Node Gate" in html
+        assert "not anonymity" in html
+        assert "not a publish path" in html
+        assert "Node Gate" in html
+        assert html.lower().count("node gate") == html.lower().count("not a node gate")
+        assert "auto-heal" in html
+        assert "#0b0b0b" in html
+        assert "#c9a227" in html
+    assert "/v1/mesh" in runtime
+    assert "enabled_default: false" in runtime
+    assert "anon_broadcast" in runtime
+    assert "not a publish path" in runtime
+
+
 def test_worker_html_title_includes_aziel_eliab():
     local = chrome()
     worker = worker_ui_source()
