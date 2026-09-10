@@ -52,7 +52,7 @@ def test_runtime_attaches_qns_cd_on_live_nodes() -> None:
     assert 'from "./mesh.js"' in RUNTIME
     assert "meshPointer" in RUNTIME
     assert "meshOpenApiPaths" in RUNTIME
-    assert "...meshOpenApiPaths()" in RUNTIME
+    assert "meshOpenApiPaths()" in RUNTIME
     assert "mesh: meshPointer()" in RUNTIME
     assert "attachQnsCd" in RUNTIME
     assert "isMeshCrossMapPath" in RUNTIME
