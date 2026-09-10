@@ -64,6 +64,8 @@ def test_live_nodes_strip_and_mesh_law():
     assert "enabled_default: false" in runtime
     assert "anon_broadcast" in runtime
     assert "not a publish path" in runtime
+    assert "QNS-CD-1.0" in runtime
+    assert "meshPointer" in runtime
 
 
 def test_worker_html_title_includes_aziel_eliab():

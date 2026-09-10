@@ -15,7 +15,7 @@ URL pattern after deploy (workers.dev + account subdomain, same as sibling produ
 - `GET /v1/*` — health/skill (does **not** increment downloads)
 - `POST /v1/{op}` — human UI backend; single-segment local ops only
 - `/v1/fraggate/*` and `/v1/runtime/*` — PROXY to aziel-runtime FragGate door
-- `/v1/mesh/*` — PROXY suite node mesh (AZIEL_RUNTIME or HTTPS fallback). Default OFF. Live Nodes strip on `/`. Not a Node Gate. Anon-broadcast is not a publish path.
+- `/v1/mesh/*` — PROXY suite node mesh (AZIEL_RUNTIME or HTTPS fallback). Default OFF. Live Nodes strip on `/`. GET `/v1/mesh`, `/status`, and `/nodes` attach the **QNS-CD-1.0** (photon QNS1 packet transfer) cross-map so peers can see it. Hub cite / Worker mesh cross-map only — not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Anon-broadcast is not a publish path. Local qnsd is [qnm-node](https://github.com/AzielEliab/qnm-node). Runtime cites: [aziel-runtime](https://github.com/AzielEliab/aziel-runtime).
 - `/robots.txt` `/sitemap.xml` `/llms.txt` `/cite.json`
 
 KV binding `DOWNLOADS` (create `AZHUB_DOWNLOADS` on first deploy; placeholder `000…` is OK until parent deploys). Account `ac575a9b822bea2bed97d0ab73aed238`.
@@ -30,3 +30,7 @@ This host `/mcp` is a pointer, not a second MCP. Catalog listing of
 `azhub` lands in a sibling aziel-runtime PR.
 
 Author: Aziel Eliab. Apache-2.0.
+
+QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1
+packet transfer). Mesh stays default OFF. This Worker does not
+implement qnsd and does not expose a public qnsd proxy.

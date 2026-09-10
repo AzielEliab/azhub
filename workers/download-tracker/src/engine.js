@@ -322,9 +322,11 @@ https://github.com/AzielEliab/fraggate. Catalog listing lands in a
 sibling aziel-runtime PR. Human chrome uses this Worker \`/v1/{op}\`
 (single-segment local ops only). \`/v1/fraggate/*\`, \`/v1/runtime/*\`,
 and \`/v1/mesh/*\` PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS
-fallback). Suite mesh default OFF. Not a Node Gate. Not anonymity.
-Anon-broadcast is not a publish path. \`GET|POST /mcp\` here is a
-pointer, not a second MCP.
+fallback). Suite mesh default OFF. QNM-BUILD-1.0 + QNS-CD-1.0
+(photon QNS1 packet transfer) is a hub cite / Worker mesh
+cross-map only — not a Softwares-tab product. No public qnsd
+proxy. Not a Node Gate. Not anonymity. Anon-broadcast is not a
+publish path. \`GET|POST /mcp\` here is a pointer, not a second MCP.
 
 **Human UI stays on this Worker.** AI path is FragGate + this OpenAPI.
 

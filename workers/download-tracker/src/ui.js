@@ -68,7 +68,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     <span class="badge">Live Nodes</span>
     <span id="nodesState" class="off">Mesh OFF</span>
     <span id="nodesRollup"></span>
-    <span id="nodesList">Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
+    <span id="nodesList">Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -98,7 +98,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
       <div class="cite">
         AI path is FragGate only: <code>POST /v1/fraggate/call</code> slug=<b>azhub</b><br>
         Door paths proxy to aziel-runtime. Local ops are <code>/v1/{op}</code> only.<br>
-        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Default OFF. Not a Node Gate. Not a publish path.<br>
+        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Default OFF. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not a publish path.<br>
         <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a> · <a href="/v1/mesh">/v1/mesh</a><br>
         Separate software (one FragGate door): <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
         <a href="https://github.com/AzielEliab/azbrowser">AZBrowser</a> ·
@@ -293,7 +293,7 @@ function paintMesh(j) {
     stateEl.textContent = "Mesh OFF";
     stateEl.className = "off";
     rollEl.textContent = "";
-    listEl.textContent = "Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.";
+    listEl.textContent = "Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.";
     meshNodeId = "";
     return;
   }

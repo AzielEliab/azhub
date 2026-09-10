@@ -57,8 +57,12 @@ Catalog listing lands in a sibling runtime PR.
 Worker `/v1/{op}` is the **human UI backend** (single-segment local ops).
 `/v1/fraggate/*`, `/v1/runtime/*`, and `/v1/mesh/*` **PROXY** to
 aziel-runtime (AZIEL_RUNTIME or HTTPS fallback). Suite mesh default
-OFF. Not a Node Gate. Not anonymity. Anon-broadcast is not a publish
-path.
+OFF. **QNS-CD-1.0** (photon QNS1 packet transfer) is a hub cite /
+Worker mesh cross-map only — not a Softwares-tab product. Local qnsd
+is coded in [qnm-node](https://github.com/AzielEliab/qnm-node). Runtime
+cites live in [aziel-runtime](https://github.com/AzielEliab/aziel-runtime).
+No public qnsd proxy. Not a Node Gate. Not anonymity. Anon-broadcast
+is not a publish path.
 `GET|POST /mcp` and `/openapi.json` document those ops and **point at
 FragGate** — they are not a second agent brand.
 
@@ -136,7 +140,7 @@ URL pattern (same as sibling Aziel Eliab products):
 | `/v1/{op}` | Human UI backend — single-segment local ops only |
 | `/v1/fraggate/*` | PROXY to aziel-runtime FragGate door |
 | `/v1/runtime/*` | PROXY aliases (`list`/`call` → `/v1/fraggate/list`/`call`) |
-| `/v1/mesh/*` | PROXY suite node mesh (default OFF; Live Nodes strip) |
+| `/v1/mesh/*` | PROXY suite node mesh (default OFF; Live Nodes strip; QNS-CD-1.0 cross-map on GET status/nodes) |
 | `/robots.txt` `/sitemap.xml` `/llms.txt` `/cite.json` | Crawler + citation |
 
 - Homepage: [https://azhub-download-tracker.vibelock.workers.dev/](https://azhub-download-tracker.vibelock.workers.dev/)
@@ -173,7 +177,7 @@ Every control calls a real `/v1` handler (same op agents call). No dead buttons.
 | tether_cut | `POST /v1/tether_cut` | `tether_cut` |
 | FragGate list | `GET /v1/fraggate/list` | PROXY to aziel-runtime |
 | FragGate call | `POST /v1/fraggate/call` | PROXY to aziel-runtime |
-| Live Nodes strip | `GET /v1/mesh/status` · `GET /v1/mesh/nodes` | PROXY suite mesh (OFF until runtime enable) |
+| Live Nodes strip | `GET /v1/mesh/status` · `GET /v1/mesh/nodes` | PROXY suite mesh (OFF until runtime enable). QNS-CD-1.0 cross-map attached for peers. |
 
 Prove locally (after `pip install -e ".[dev]"`):
 
@@ -212,6 +216,7 @@ pip install -e ".[dev]"
 python -m pytest -q
 node tests/test_worker_engine.mjs
 node tests/test_worker_door.mjs
+node tests/test_worker_mesh.mjs
 azhub doctor
 ```
 
@@ -234,6 +239,7 @@ azhub/              library (catalog, surface, engine, cli, door)
 tests/              pytest + Worker door/engine
 docs/               AIH-WP-1.0 whitepaper
 workers/download-tracker/   Cloudflare Worker azhub-download-tracker
+                    src/mesh.js  QNM Live Nodes + QNS-CD-1.0 cross-map
 mobile/             Flutter scaffold
 SKILL.md            agent skill (also GET /v1/skill)
 ```
@@ -241,6 +247,7 @@ SKILL.md            agent skill (also GET /v1/skill)
 ## Cross-links (optional, not required)
 
 - Runtime / FragGate door: https://github.com/AzielEliab/aziel-runtime · https://aziel-runtime.vibelock.workers.dev/
+- Local node / qnsd (QNS-CD-1.0): https://github.com/AzielEliab/qnm-node
 - FragGate kernel: https://github.com/AzielEliab/fraggate
 - Digital Library: https://www.azielcorpuslibrary.net/
 - AZInterface (sibling — never collapse): https://github.com/AzielEliab/azinterface
