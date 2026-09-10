@@ -16,7 +16,9 @@ with `slug=azhub`. Catalog MCP:
 This Worker's `/mcp` is a pointer, not a second MCP. Human chrome uses
 `/v1/{op}` (single-segment local ops). `/v1/fraggate/*`,
 `/v1/runtime/*`, and `/v1/mesh/*` PROXY to aziel-runtime — they are not
-local op names. Suite mesh default OFF. Not a Node Gate. Not anonymity.
+local op names. Suite mesh default OFF. QNS-CD-1.0 (photon QNS1 packet
+transfer) is a hub cite / Worker mesh cross-map only — not a
+Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not anonymity.
 Anon-broadcast is not a publish path.
 
 AZHub and AZInterface are **separate software** under **one FragGate

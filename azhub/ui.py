@@ -81,7 +81,7 @@ a{{color:var(--gold)}}
     <span class="badge">Live Nodes</span>
     <span id="nodesState" class="off">Mesh OFF</span>
     <span id="nodesRollup"></span>
-    <span id="nodesList">Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
+    <span id="nodesList">Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -104,7 +104,7 @@ a{{color:var(--gold)}}
       <h2>Receipts</h2>
       <div id="receipts"></div>
       <h2>FragGate</h2>
-      <div class="cite">AI path is FragGate only. This chrome is human software. Suite mesh <code>/v1/mesh/*</code> PROXIES to aziel-runtime. Default OFF. Not a Node Gate. Not a publish path. AZInterface, AZBrowser, and AZNet are separate software under one FragGate door.</div>
+      <div class="cite">AI path is FragGate only. This chrome is human software. Suite mesh <code>/v1/mesh/*</code> PROXIES to aziel-runtime. Default OFF. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not a publish path. AZInterface, AZBrowser, and AZNet are separate software under one FragGate door.</div>
     </aside>
   </div>
   <div id="status">AZHub {__version__} local · AIH-WP-1.0 · Blank Key · not Interface · 127.0.0.1:{PORT}</div>
@@ -281,7 +281,7 @@ function paintMesh(j) {{
     stateEl.textContent = "Mesh OFF";
     stateEl.className = "off";
     rollEl.textContent = "";
-    listEl.textContent = "Default off until runtime enable. Presence only — not anonymity. Anon-broadcast is not a publish path.";
+    listEl.textContent = "Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.";
     meshNodeId = "";
     return;
   }}

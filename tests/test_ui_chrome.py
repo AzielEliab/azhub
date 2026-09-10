@@ -13,6 +13,10 @@ def worker_runtime_source() -> str:
     return (ROOT / "workers" / "download-tracker" / "src" / "runtime.js").read_text(encoding="utf-8")
 
 
+def worker_mesh_source() -> str:
+    return (ROOT / "workers" / "download-tracker" / "src" / "mesh.js").read_text(encoding="utf-8")
+
+
 def test_local_chrome_has_wired_popup():
     html = chrome()
     assert "draggable" in html
@@ -60,10 +64,14 @@ def test_live_nodes_strip_and_mesh_law():
         assert "auto-heal" in html
         assert "#0b0b0b" in html
         assert "#c9a227" in html
+    mesh = worker_mesh_source()
     assert "/v1/mesh" in runtime
-    assert "enabled_default: false" in runtime
-    assert "anon_broadcast" in runtime
-    assert "not a publish path" in runtime
+    assert "enabled_default: false" in mesh
+    assert "anon_broadcast" in mesh
+    assert "not a publish path" in mesh
+    assert "QNS-CD-1.0" in runtime
+    assert "meshPointer" in runtime
+    assert "QNS-CD-1.0" in mesh
 
 
 def test_worker_html_title_includes_aziel_eliab():

@@ -158,6 +158,10 @@ try {
   const meshRes = await handleRuntimeApi(meshReq, new URL(meshReq.url), {});
   const meshBody = await meshRes.json();
   assert.equal(meshBody.ok, true);
+  assert.equal(meshBody.qns_cd_spec, "QNS-CD-1.0");
+  assert.equal(meshBody.qns_cd.spec, "QNS-CD-1.0");
+  assert.equal(meshBody.qns_cd.public_qnsd_proxy, false);
+  assert.equal(meshBody.qns_cd.softwares_tab, false);
   assert.equal(meshRes.headers.get("X-Aziel-Door"), "proxy");
   assert.ok(fetches.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/status" && f.method === "GET"));
 
@@ -181,6 +185,8 @@ try {
   });
   const meshBoundBody = await meshBoundRes.json();
   assert.equal(meshBoundBody.via, "binding");
+  assert.equal(meshBoundBody.qns_cd_spec, "QNS-CD-1.0");
+  assert.equal(meshBoundBody.qns_cd.local_daemon.coded_in, "https://github.com/AzielEliab/qnm-node");
   assert.equal(fetches.length, 0, "AZIEL_RUNTIME binding must win over HTTPS fallback");
   assert.ok(boundCalls.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/nodes"));
 
@@ -200,7 +206,10 @@ try {
   assert.equal(mcp.mesh.auto_heal, false);
   assert.equal(mcp.mesh.anonymity, false);
   assert.match(mcp.mesh.anon_broadcast, /not a publish path/);
+  assert.equal(mcp.mesh.qns_cd_spec, "QNS-CD-1.0");
+  assert.equal(mcp.mesh.qns_cd.spec, "QNS-CD-1.0");
   assert.match(mcp.note, /mesh/);
+  assert.match(mcp.note, /QNS-CD-1\.0/);
 
   for (const path of ["/count", "/stats", "/download", "/"]) {
     const req = new Request("https://azhub-download-tracker.vibelock.workers.dev" + path, { method: "GET" });

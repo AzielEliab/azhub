@@ -36,7 +36,13 @@ https://github.com/AzielEliab/fraggate. Catalog listing lands in a
 sibling aziel-runtime PR. Human chrome uses this Worker's `/v1/{op}`
 (single-segment local ops). `/v1/fraggate/*`, `/v1/runtime/*`, and
 `/v1/mesh/*` PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback).
-Suite mesh default OFF until runtime enable. Not a Node Gate. Not
+Suite mesh default OFF until runtime enable. **QNS-CD-1.0** (photon
+QNS1 packet transfer) is a hub cite / Worker mesh cross-map only —
+not a Softwares-tab product. Local qnsd lives in
+[qnm-node](https://github.com/AzielEliab/qnm-node). Runtime cites live
+in [aziel-runtime](https://github.com/AzielEliab/aziel-runtime)
+(`docs/NODE_MESH.md`, `docs/designs/QNM-WP-1.0.md`). Pair custody is
+AZInterface. No public qnsd proxy. Not a Node Gate. Not
 anonymity. Anon-broadcast is not a publish path. `GET|POST /mcp` on
 this host is a **pointer**, not a second MCP. AI / MCP path is FragGate
 only.
@@ -88,7 +94,7 @@ Host: `https://azhub-download-tracker.vibelock.workers.dev`
 | GET | `/v1/fraggate/list` | PROXY to aziel-runtime FragGate list. |
 | POST | `/v1/fraggate/call` | PROXY to aziel-runtime FragGate call. |
 | GET/POST | `/v1/runtime/*` | PROXY aliases (`list`/`call` → FragGate). |
-| GET | `/v1/mesh` `/v1/mesh/status` `/v1/mesh/nodes` | PROXY suite mesh (default OFF). |
+| GET | `/v1/mesh` `/v1/mesh/status` `/v1/mesh/nodes` | PROXY suite mesh (default OFF). GET status/nodes attach the QNS-CD-1.0 cross-map for peers. |
 | POST | `/v1/mesh/*` | PROXY join/heartbeat/leave/enable/disable/broadcast (hash receipt only; not a publish path). |
 | GET | `/download` | Counted tarball. |
 | GET | `/count` | `{views, downloads, total}` |
@@ -139,8 +145,10 @@ Apache-2.0. Forks are welcome and always allowed.
 - Agent door: `POST https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call` `{slug:azhub,op,payload}`
 - FragGate: https://github.com/AzielEliab/fraggate
 - Runtime: https://github.com/AzielEliab/aziel-runtime
+- Local node / qnsd: https://github.com/AzielEliab/qnm-node
+- QNS-CD-1.0: photon QNS1 packet transfer (hub cite / Worker mesh cross-map only; not a Softwares-tab product)
 - Library: https://www.azielcorpuslibrary.net/
-- AZInterface (sibling — never collapse): https://github.com/AzielEliab/azinterface
+- AZInterface (sibling — pair custody; never collapse): https://github.com/AzielEliab/azinterface
 - AZBrowser (sibling): https://github.com/AzielEliab/azbrowser
 - AZNet (sibling): https://github.com/AzielEliab/aznet
 - godlock.uk · https://www.azieleliab.com

@@ -28,6 +28,7 @@ import {
   dispatch,
 } from "./engine.js";
 import { classifyV1Path, doorTargetUrl } from "./door.js";
+import { attachQnsCd, isMeshCrossMapPath, meshOpenApiPaths, meshPointer } from "./mesh.js";
 
 function corsHeaders() {
   return {
@@ -142,82 +143,14 @@ function openapiSpec(origin) {
       responses: { "200": { description: "hashed registry" } },
     },
   };
-  paths["/v1/mesh"] = {
-    get: {
-      operationId: "azhub_mesh_status_proxy",
-      summary: "PROXY to aziel-runtime GET /v1/mesh. Suite node mesh status. Default OFF. Not a local op. Not AnonBroadcast.",
-      responses: { "200": { description: "enabled + live_nodes (NM-0.1)" } },
-    },
-  };
-  paths["/v1/mesh/status"] = {
-    get: {
-      operationId: "azhub_mesh_status_alias_proxy",
-      summary: "PROXY alias of GET /v1/mesh. Default OFF until runtime enable.",
-      responses: { "200": { description: "enabled + live_nodes" } },
-    },
-  };
-  paths["/v1/mesh/nodes"] = {
-    get: {
-      operationId: "azhub_mesh_nodes_proxy",
-      summary: "PROXY to aziel-runtime GET /v1/mesh/nodes. Live nodes, 5-minute presence. Not a Node Gate.",
-      responses: { "200": { description: "nodes[]" } },
-    },
-  };
-  paths["/v1/mesh/join"] = {
-    post: {
-      operationId: "azhub_mesh_join_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/join. Refused while mesh is OFF. Body {product, node_id?, label?}.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "session + node" } },
-    },
-  };
-  paths["/v1/mesh/heartbeat"] = {
-    post: {
-      operationId: "azhub_mesh_heartbeat_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/heartbeat. Presence refresh. No auto-heal.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "node last_seen" } },
-    },
-  };
-  paths["/v1/mesh/leave"] = {
-    post: {
-      operationId: "azhub_mesh_leave_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/leave. Idempotent.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "left" } },
-    },
-  };
-  paths["/v1/mesh/enable"] = {
-    post: {
-      operationId: "azhub_mesh_enable_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/enable. Runtime kill switch. Hub does not enable on its own.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "enabled" } },
-    },
-  };
-  paths["/v1/mesh/disable"] = {
-    post: {
-      operationId: "azhub_mesh_disable_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/disable. Always allowed. No wipe.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "disabled" } },
-    },
-  };
-  paths["/v1/mesh/broadcast"] = {
-    post: {
-      operationId: "azhub_mesh_broadcast_proxy",
-      summary: "PROXY to aziel-runtime POST /v1/mesh/broadcast. SHA-256 hash receipt only. Not a publish path. Not AnonBroadcast. No video bytes.",
-      requestBody: { content: { "application/json": { schema: { type: "object" } } } },
-      responses: { "200": { description: "hash receipt" } },
-    },
-  };
+  Object.assign(paths, meshOpenApiPaths());
   return {
     openapi: "3.1.0",
     info: {
       title: "AZHub runtime",
       version: VERSION,
       summary: "Dual surface. Human UI is this Worker /v1. AI / MCP path is FragGate only (slug=azhub).",
-      description: LIMITATION + " Agent door is FragGate only: POST " + FRAGGATE_CALL + " {slug:azhub,op,payload}. Catalog MCP: POST " + FRAGGATE_MCP + ". This host /mcp is a pointer, not a second agent brand. Human chrome uses same-origin /v1. Suite mesh /v1/mesh/* PROXIES to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback). Default OFF. Not AnonBroadcast. Not a Node Gate. Not a publish path.",
+      description: LIMITATION + " Agent door is FragGate only: POST " + FRAGGATE_CALL + " {slug:azhub,op,payload}. Catalog MCP: POST " + FRAGGATE_MCP + ". This host /mcp is a pointer, not a second agent brand. Human chrome uses same-origin /v1. Suite mesh /v1/mesh/* PROXIES to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback). Default OFF. QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not AnonBroadcast. Not a Node Gate. Not a publish path.",
       license: { name: "Apache-2.0", identifier: "Apache-2.0" },
       contact: { name: IDENTITY, url: "https://github.com/AzielEliab/azhub" },
     },
@@ -238,12 +171,12 @@ function mcpDocs(origin) {
     catalog_mcp: FRAGGATE_MCP,
     body: { slug: "azhub", op: "blank_key_status", payload: {} },
     openapi: origin + "/openapi.json",
-    note: "AI / MCP path is FragGate only. This host /v1/fraggate/* , /v1/runtime/* , and /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback to " + RUNTIME + "). Local ops are /v1/{op} only. Catalog MCP: POST " + FRAGGATE_MCP + ". Suite mesh is slug=mesh on that catalog (default OFF). Anon-broadcast is not a publish path and not a Softwares-tab product. AZInterface, AZBrowser, and AZNet are siblings, not this product.",
+    note: "AI / MCP path is FragGate only. This host /v1/fraggate/* , /v1/runtime/* , and /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback to " + RUNTIME + "). Local ops are /v1/{op} only. Catalog MCP: POST " + FRAGGATE_MCP + ". Suite mesh is slug=mesh on that catalog (default OFF). QNS-CD-1.0 (photon QNS1 packet transfer) is a hub cite / Worker mesh cross-map only — not a Softwares-tab product. No public qnsd proxy. Anon-broadcast is not a publish path and not a Softwares-tab product. AZInterface, AZBrowser, and AZNet are siblings, not this product.",
     ops: [...OPS],
     live_ops: [...LIVE_OPS],
     fraggate_live_ops: [...FRAGGATE_LIVE_OPS],
     stub_ops: [...STUB_OPS],
-    mesh: { path: "/v1/mesh", enabled_default: false, proxy: true, node_gate: false, auto_heal: false, anonymity: false, anon_broadcast: "not a publish path" },
+    mesh: meshPointer(),
     tools: toolDefs().map((t) => t.name),
     limitation: LIMITATION,
     kernel: FRAGGATE,
@@ -279,6 +212,25 @@ async function proxyDoor(request, url, env) {
     for (const [k, v] of Object.entries(corsHeaders())) outHeaders.set(k, v);
     outHeaders.set("X-Aziel-Door", "proxy");
     outHeaders.set("X-Aziel-Door-Origin", dest);
+    const method = String(request.method || "GET").toUpperCase();
+    if (method === "GET" && isMeshCrossMapPath(url.pathname)) {
+      const text = await res.text();
+      try {
+        const data = text ? JSON.parse(text) : null;
+        if (data && typeof data === "object" && !Array.isArray(data)) {
+          const decorated = attachQnsCd(data);
+          outHeaders.set("Content-Type", "application/json; charset=utf-8");
+          return new Response(JSON.stringify(decorated, null, 2), {
+            status: res.status,
+            statusText: res.statusText,
+            headers: outHeaders,
+          });
+        }
+      } catch {
+        /* non-JSON mesh body is returned as-is */
+      }
+      return new Response(text, { status: res.status, statusText: res.statusText, headers: outHeaders });
+    }
     return new Response(res.body, { status: res.status, statusText: res.statusText, headers: outHeaders });
   } catch (exc) {
     return json({
@@ -347,7 +299,7 @@ export async function handleRuntimeApi(request, url, env) {
   }
   if (path === "/llms.txt" || path === "/ai.txt") {
     return new Response(
-      `AZHub ${VERSION} by ${IDENTITY}. Apache-2.0. ${LIMITATION}\nAgent path is FragGate only: POST ${FRAGGATE_CALL} {"slug":"azhub","op":"…","payload":{}}\nThis Worker /v1/fraggate/* , /v1/runtime/* , and /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback).\nSuite mesh default OFF. Not a Node Gate. Not anonymity. Anon-broadcast is not a publish path.\nLocal ops are /v1/{op} only.\nCatalog MCP: POST ${FRAGGATE_MCP}\nThis Worker /mcp is a pointer, not a second MCP.\nHuman UI: ${originOf(request)}/\nSkill: ${originOf(request)}/v1/skill\nOpenAPI: ${originOf(request)}/openapi.json\nMesh: ${originOf(request)}/v1/mesh\nSiblings: AZInterface ${AZINTERFACE} · AZBrowser ${AZBROWSER} · AZNet ${AZNET}\nAllow: ${AI_CLIENTS.join("; ")}\n`,
+      `AZHub ${VERSION} by ${IDENTITY}. Apache-2.0. ${LIMITATION}\nAgent path is FragGate only: POST ${FRAGGATE_CALL} {"slug":"azhub","op":"…","payload":{}}\nThis Worker /v1/fraggate/* , /v1/runtime/* , and /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback).\nSuite mesh default OFF. QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not anonymity. Anon-broadcast is not a publish path.\nLocal ops are /v1/{op} only.\nCatalog MCP: POST ${FRAGGATE_MCP}\nThis Worker /mcp is a pointer, not a second MCP.\nHuman UI: ${originOf(request)}/\nSkill: ${originOf(request)}/v1/skill\nOpenAPI: ${originOf(request)}/openapi.json\nMesh: ${originOf(request)}/v1/mesh\nSiblings: AZInterface ${AZINTERFACE} · AZBrowser ${AZBROWSER} · AZNet ${AZNET}\nAllow: ${AI_CLIENTS.join("; ")}\n`,
       { headers: { "Content-Type": "text/plain; charset=utf-8", ...corsHeaders() } },
     );
   }
