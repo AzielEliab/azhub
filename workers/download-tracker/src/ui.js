@@ -66,9 +66,9 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
   </div>
   <div id="nodes" aria-live="polite">
     <span class="badge">Live Nodes</span>
-    <span id="nodesState" class="off">Mesh OFF</span>
+    <span id="nodesState" class="on">Mesh ON</span>
     <span id="nodesRollup"></span>
-    <span id="nodesList">Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
+    <span id="nodesList">Live Nodes from runtime. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -98,7 +98,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
       <div class="cite">
         AI path is FragGate only: <code>POST /v1/fraggate/call</code> slug=<b>azhub</b><br>
         Door paths proxy to aziel-runtime. Local ops are <code>/v1/{op}</code> only.<br>
-        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Default OFF. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not a publish path.<br>
+        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Read-only Live Nodes from runtime status. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. Not a Softwares-tab product. No public qnsd proxy. Not a Node Gate. Not a publish path.<br>
         <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a> · <a href="/v1/mesh">/v1/mesh</a><br>
         Separate software (one FragGate door): <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
         <a href="https://github.com/AzielEliab/azbrowser">AZBrowser</a> ·
@@ -283,32 +283,39 @@ function meshRollup(j) {
   });
   return tagged ? { live, locked, isolated } : null;
 }
+function meshView(j) {
+  if (!j || typeof j !== "object") return {};
+  if (j.result && typeof j.result === "object" && !Array.isArray(j.result)) {
+    return Object.assign({}, j, j.result);
+  }
+  if (j.mesh && typeof j.mesh === "object" && !Array.isArray(j.mesh)) {
+    return Object.assign({}, j, j.mesh);
+  }
+  return j;
+}
 function paintMesh(j) {
-  const enabled = !!(j && j.enabled);
+  const view = meshView(j);
   const stateEl = document.getElementById("nodesState");
   const rollEl = document.getElementById("nodesRollup");
   const listEl = document.getElementById("nodesList");
   if (!stateEl || !rollEl || !listEl) return;
-  if (!enabled) {
-    stateEl.textContent = "Mesh OFF";
-    stateEl.className = "off";
-    rollEl.textContent = "";
-    listEl.textContent = "Default off until runtime enable. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.";
-    meshNodeId = "";
-    return;
-  }
   stateEl.textContent = "Mesh ON";
   stateEl.className = "on";
-  const roll = meshRollup(j);
+  const roll = meshRollup(view);
+  const live = (roll && Number.isFinite(roll.live) ? roll.live : 0) || Number(view.live_nodes) || 0;
   rollEl.textContent = roll
     ? ("live " + roll.live + " · locked " + roll.locked + " · isolated " + roll.isolated)
-    : ((j.live_nodes || 0) + " live");
-  const products = j.products_present || j.products || [];
-  const nodes = j.nodes || [];
+    : (live ? (live + " live") : "");
+  const products = view.products_present || view.products || [];
+  const nodes = view.nodes || [];
   const labels = nodes.length
     ? nodes.map(n => (n && (n.label || n.product || n.node_id)) || "").filter(Boolean)
     : products;
-  listEl.textContent = labels.length ? labels.join(" · ") : "No live nodes.";
+  listEl.textContent = labels.length
+    ? labels.join(" · ")
+    : (live
+      ? (live + " Live Nodes. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.")
+      : "Live Nodes from runtime. QNS-CD-1.0 cross-map only. Presence only — not anonymity. Anon-broadcast is not a publish path.");
 }
 async function meshJson(path, init) {
   const headers = { "user-agent": "Mozilla/5.0" };
@@ -319,10 +326,11 @@ async function meshJson(path, init) {
 async function meshTick() {
   let status;
   try { status = await meshJson("/v1/mesh/status"); } catch { return; }
-  let view = status;
+  let view = meshView(status);
   try {
     const extra = await meshJson("/v1/mesh/nodes");
-    if (extra && extra.nodes) view = Object.assign({}, status, extra);
+    const extraView = meshView(extra);
+    if (extraView && extraView.nodes) view = Object.assign({}, view, extraView);
   } catch { /* status is enough */ }
   paintMesh(view);
   if (!view || !view.enabled) return;

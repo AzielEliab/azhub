@@ -50,7 +50,10 @@ def test_live_nodes_strip_and_mesh_law():
     runtime = worker_runtime_source()
     for html in (local, worker):
         assert "Live Nodes" in html
-        assert "Mesh OFF" in html
+        assert "Mesh ON" in html
+        assert "Mesh OFF" not in html
+        assert "mesh/disable" not in html
+        assert "Default off until runtime enable" not in html
         assert 'id="nodes"' in html
         assert "/v1/mesh/status" in html
         assert "/v1/mesh/join" in html
