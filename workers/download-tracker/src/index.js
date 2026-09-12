@@ -19,6 +19,8 @@ const DEFAULT_REPO = "azhub";
 const DEFAULT_BRANCH = "main";
 const HOST = "https://azhub-download-tracker.vibelock.workers.dev";
 const GITHUB_REPO = "https://github.com/AzielEliab/azhub";
+/** Same-origin rose-star brand mark (Aziel Eliab). Empty alt — no words on the mark. */
+const BRAND_MARK_PATH = "/sigil.png";
 
 function corsHeaders() {
   return {
@@ -209,6 +211,21 @@ echo "Blank Key — not Interface. Author: Aziel Eliab."
 `;
 }
 
+async function serveBrandMark(request, env) {
+  if (!env.ASSETS) return json({ error: "assets binding missing" }, 500);
+  const assetUrl = new URL(BRAND_MARK_PATH, request.url);
+  const assetRes = await env.ASSETS.fetch(new Request(assetUrl, { method: "GET" }));
+  if (!assetRes.ok) return json({ error: "asset not hosted", asset: "sigil.png", status: assetRes.status }, 404);
+  const headers = new Headers();
+  headers.set("Content-Type", "image/png");
+  headers.set("Cache-Control", "public, max-age=86400, immutable");
+  const len = assetRes.headers.get("Content-Length");
+  if (len) headers.set("Content-Length", len);
+  for (const [k, v] of Object.entries(corsHeaders())) headers.set(k, v);
+  if (request.method === "HEAD") return new Response(null, { status: 200, headers });
+  return new Response(assetRes.body, { status: 200, headers });
+}
+
 async function serveAsset(request, env, asset, { head = false } = {}) {
   if (!env.ASSETS) return json({ error: "assets binding missing" }, 500);
   const assetUrl = new URL("/" + asset, request.url);
@@ -232,6 +249,10 @@ export default {
 
     const runtime = await handleRuntimeApi(request, url, env);
     if (runtime) return runtime;
+
+    if ((url.pathname === BRAND_MARK_PATH || url.pathname === BRAND_MARK_PATH + "/") && (request.method === "GET" || request.method === "HEAD")) {
+      return serveBrandMark(request, env);
+    }
 
     if ((url.pathname === "/install.sh" || url.pathname === "/install.sh/") && (request.method === "GET" || request.method === "HEAD")) {
       return new Response(request.method === "HEAD" ? null : installScript(), {
@@ -317,7 +338,7 @@ export default {
       return new Response(allow, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", ...corsHeaders() } });
     }
     if ((url.pathname === "/sitemap.xml" || url.pathname === "/sitemap.xml/") && request.method === "GET") {
-      const locs = [HOST + "/", HOST + "/download", HOST + "/install.sh", HOST + "/v1/skill", HOST + "/v1/mesh", HOST + "/openapi.json", HOST + "/mcp", HOST + "/llms.txt", HOST + "/cite.json", GITHUB_REPO];
+      const locs = [HOST + "/", HOST + "/sigil.png", HOST + "/download", HOST + "/install.sh", HOST + "/v1/skill", HOST + "/v1/mesh", HOST + "/openapi.json", HOST + "/mcp", HOST + "/llms.txt", HOST + "/cite.json", GITHUB_REPO];
       const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + locs.map((u) => "  <url><loc>" + u + "</loc></url>").join("\n")
         + "\n</urlset>\n";

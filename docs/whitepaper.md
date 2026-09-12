@@ -71,8 +71,8 @@ does not embed their protocols.
 
 ## Human chrome
 
-Black background, gold trim, white text. Home is the everblooming
-sigil (`https://www.azielcorpuslibrary.net/sigil.png`).
+Black background, gold trim, white text. Home is the rose-star
+brand mark (`/sigil.png`).
 
 The operator drags **app/module tiles and Lock tiles** onto the Hub
 surface. A **drop** opens a **popup** for that tile with wired

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -15,6 +16,7 @@ from .receipts import Ledger
 
 PORT = 8878
 ENGINE = Engine(Ledger("./azhub_receipts.jsonl"))
+_SIGIL_FILE = Path(__file__).resolve().parents[1] / "workers" / "download-tracker" / "public" / "sigil.png"
 
 
 def chrome() -> str:
@@ -24,6 +26,7 @@ def chrome() -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AZHub — Blank Key · Aziel Eliab</title>
+<link rel="icon" type="image/png" href="/sigil.png">
 <style>
 :root{{color-scheme:dark;--bg:#0b0b0b;--gold:#c9a227;--trim:#8a7219;--text:#ffffff;--muted:#d8d0c0;--panel:#101010}}
 *{{box-sizing:border-box}}
@@ -32,7 +35,7 @@ html,body{{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px
 #bar{{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--gold);background:#111}}
 #bar button{{background:#161616;color:var(--text);border:1px solid var(--gold);border-radius:8px;min-height:34px;padding:0 12px;cursor:pointer}}
 #bar button:hover{{background:#241c0d;color:var(--gold)}}
-#homeBtn img{{width:22px;height:22px;vertical-align:middle}}
+#homeBtn img,.brandmark{{width:40px;height:40px;border-radius:10px;object-fit:cover;vertical-align:middle;box-shadow:0 0 0 1px #0003,0 0 0 1px var(--gold)}}
 h1{{font-size:16px;color:var(--gold);font-weight:500;margin:0}}
 .badge{{color:var(--gold);letter-spacing:.08em;text-transform:uppercase;font-size:11px}}
 #body{{flex:1;display:grid;grid-template-columns:220px 1fr 300px;min-height:0}}
@@ -69,7 +72,7 @@ a{{color:var(--gold)}}
 <body>
 <div id="win">
   <div id="bar">
-    <button id="btnHome" type="button" title="Home — everblooming sigil"><span id="homeBtn"><img alt="Home" src="{SIGIL}"></span></button>
+    <button id="btnHome" type="button" title="Home"><span id="homeBtn"><img class="brandmark" src="/sigil.png" width="40" height="40" alt="" decoding="async"></span></button>
     <h1>AZHub</h1>
     <span class="badge">Blank Key</span>
     <button id="btnStatus" type="button">blank_key_status</button>
@@ -383,6 +386,12 @@ def serve(host: str = "127.0.0.1", port: int = PORT) -> int:
             path = urlparse(self.path).path
             if path in ("/", "/index.html"):
                 self._send(200, chrome().encode("utf-8"), "text/html; charset=utf-8")
+                return
+            if path == "/sigil.png":
+                if _SIGIL_FILE.is_file():
+                    self._send(200, _SIGIL_FILE.read_bytes(), "image/png")
+                    return
+                self._json({"error": "sigil not hosted"}, 404)
                 return
             if path == "/v1/health":
                 self._json(ENGINE.health({}))

@@ -13,7 +13,8 @@ export const FRAGGATE = "https://github.com/AzielEliab/fraggate";
 export const FRAGGATE_CALL = "https://aziel-runtime.vibelock.workers.dev/v1/fraggate/call";
 export const FRAGGATE_MCP = "https://aziel-runtime.vibelock.workers.dev/mcp";
 export const HOST = "https://azhub-download-tracker.vibelock.workers.dev";
-export const SIGIL = "https://www.azielcorpuslibrary.net/sigil.png";
+/** Same-origin rose-star brand mark. Empty alt on the public img — no words on the mark. */
+export const SIGIL = "/sigil.png";
 export const AZINTERFACE = "https://github.com/AzielEliab/azinterface";
 export const AZBROWSER = "https://github.com/AzielEliab/azbrowser";
 export const AZNET = "https://github.com/AzielEliab/aznet";
@@ -343,7 +344,7 @@ Never collapse them into one engine.
 | \`tether_list\` | Corridor list |
 | \`tether_cut\` | Cut a declared corridor |
 | \`remove_module\` | Take a tile off the Blank Key |
-| \`blank_key_status\` | Home (everblooming sigil) |
+| \`blank_key_status\` | Home / sigil |
 | \`health\` \`skill\` | Liveness / skill |
 
 Human chrome also keeps \`place\`, \`list_modules\`, and \`isolate\`

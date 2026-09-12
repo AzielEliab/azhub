@@ -61,7 +61,7 @@ next input. No technical MCP UI is required for the human.
 | `tether_list` | tether_list | `/v1/tether_list` |
 | `tether_cut` | tether_cut | `/v1/tether_cut` |
 | `remove_module` | Drop → Remove | `/v1/remove_module` |
-| `blank_key_status` | Home (everblooming sigil) | `/v1/blank_key_status` |
+| `blank_key_status` | Home / sigil | `/v1/blank_key_status` |
 | `health` `skill` | Liveness / skill | `/v1/health` `/v1/skill` |
 
 Human chrome also keeps `isolate` on `/v1/isolate` (tile stays; bound and

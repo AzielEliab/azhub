@@ -26,7 +26,10 @@ def test_local_chrome_has_wired_popup():
     assert 'id="actRemove"' in html
     assert "tether_cut" in html
     assert "blank_key_status" in html
-    assert "everblooming" in html.lower() or "sigil" in html
+    assert 'class="brandmark"' in html
+    assert 'src="/sigil.png"' in html
+    assert 'alt=""' in html
+    assert "everblooming" not in html.lower()
     assert "#0b0b0b" in html
     assert "#c9a227" in html
 
@@ -42,6 +45,12 @@ def test_worker_ui_has_wired_popup():
     assert 'callOp("remove_module"' in html
     assert 'callOp("tether_cut"' in html
     assert "azinterface" in html.lower()
+    assert 'class="brandmark"' in html
+    assert 'src="/sigil.png"' in html
+    assert 'alt=""' in html
+    assert "everblooming" not in html.lower()
+    assert 'title="Home — everblooming sigil"' not in html
+    assert 'alt="Home"' not in html
 
 
 def test_live_nodes_strip_and_mesh_law():

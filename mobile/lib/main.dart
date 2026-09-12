@@ -70,7 +70,7 @@ class _BlankKeyPageState extends State<BlankKeyPage> {
   }
 
   void _home() {
-    setState(() => _status = 'Home — everblooming sigil. Blank Key.');
+    setState(() => _status = 'Home. Blank Key.');
     _receipt('blank_key_status');
   }
 
