@@ -41,7 +41,7 @@ not AZBrowser, and not AZNet.
 1. **Human UI** — Worker homepage is complete software: drag-and-drop
    module tiles **and** Lock tiles onto the Hub surface. Drop opens a
    **popup** with wired Place / Tether / Isolate buttons. Home is the
-   everblooming sigil. Black / gold / white. Counted download.
+   rose-star brand mark (`/sigil.png`). Black / gold / white. Counted download.
 2. **Agent / MCP — FragGate only** via aziel-runtime:
 
 ```bash
@@ -145,7 +145,7 @@ URL pattern (same as sibling Aziel Eliab products):
 
 - Homepage: [https://azhub-download-tracker.vibelock.workers.dev/](https://azhub-download-tracker.vibelock.workers.dev/)
 - Direct tarball: [azhub-0.1.0.tar.gz](https://azhub-download-tracker.vibelock.workers.dev/download?asset=azhub-0.1.0.tar.gz)
-- Sigil: [https://www.azielcorpuslibrary.net/sigil.png](https://www.azielcorpuslibrary.net/sigil.png)
+- Sigil: [https://azhub-download-tracker.vibelock.workers.dev/sigil.png](https://azhub-download-tracker.vibelock.workers.dev/sigil.png)
 - Cite: [cite.json](https://azhub-download-tracker.vibelock.workers.dev/cite.json) — Eliab, Aziel. (2026). AZHub 0.1.0 [Software]. Apache-2.0. Do not invent a DOI.
 
 Isolated counter: Worker `azhub-download-tracker`, KV `AZHUB_DOWNLOADS`. `/v1` and `/mcp` do not increment downloads.
@@ -217,6 +217,7 @@ python -m pytest -q
 node tests/test_worker_engine.mjs
 node tests/test_worker_door.mjs
 node tests/test_worker_mesh.mjs
+node tests/test_worker_brand.mjs
 azhub doctor
 ```
 

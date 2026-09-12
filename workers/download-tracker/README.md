@@ -7,6 +7,7 @@ URL pattern after deploy (workers.dev + account subdomain, same as sibling produ
 `https://azhub-download-tracker.vibelock.workers.dev`
 
 - `GET /` — complete Blank Key UI (drag module/Lock tiles, drop popup, declared corridors) + counted views
+- `GET /sigil.png` — local rose-star brand mark (empty alt on the chrome img)
 - `GET /download` — counted tarball (HTTP 200 gzip, no 302)
 - `GET /count` — `{views, downloads, total}`
 - `GET /stats` — views/downloads/by_repo/branch/fork
