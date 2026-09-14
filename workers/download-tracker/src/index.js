@@ -355,9 +355,11 @@ export default {
         license: "Apache-2.0",
         catalog: "https://aziel-runtime.vibelock.workers.dev/",
         fraggate: "https://github.com/AzielEliab/fraggate",
-        note: "Do not invent a DOI. Hub is not AZInterface. QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). Not a Softwares-tab product. No public qnsd proxy. Mesh default OFF.",
+        note: "Do not invent a DOI. Hub is not AZInterface. QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. Mesh default OFF.",
         qns_cd: "QNS-CD-1.0",
         qns_cd_title: "photon QNS1 packet transfer",
+        split_the_wires: "SPLIT-THE-WIRES-1.0",
+        cold_copy_survival: "COLD-COPY-SURVIVAL-1.0",
         qnm_node: "https://github.com/AzielEliab/qnm-node",
         runtime: "https://github.com/AzielEliab/aziel-runtime",
       });

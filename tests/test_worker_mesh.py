@@ -1,6 +1,7 @@
-"""Suite mesh Live Nodes + QNS-CD-1.0 cross-map contract.
+"""Suite mesh Live Nodes + QNS-CD-1.0 + mesh-law contract.
 
 Default OFF. live|locked|isolated. No Node Gate. No public qnsd proxy.
+SPLIT THE WIRES + COLD-COPY SURVIVAL are status/refuse only.
 Hub cite / Worker mesh cross-map only — not a Softwares-tab product.
 """
 
@@ -32,6 +33,37 @@ def test_mesh_exports_qns_cd_cross_map() -> None:
     assert "QNS-CD-1.0" in MESH.split("export const MESH_NOTE", 1)[1][:800]
 
 
+def test_mesh_exports_split_the_wires_and_cold_copy_survival() -> None:
+    assert 'SPLIT_THE_WIRES_SPEC = "SPLIT-THE-WIRES-1.0"' in MESH
+    assert 'SPLIT_THE_WIRES_TITLE = "SPLIT THE WIRES"' in MESH
+    assert "export const SPLIT_THE_WIRES" in MESH
+    assert "tip-only 0.5–1s tick" in MESH.lower() or "tip-only 0.5-1s tick" in MESH.lower()
+    assert "pull-only" in MESH
+    assert "update is proof" in MESH.lower() or 'update: "proof"' in MESH
+    assert "777s dwell" in MESH
+    assert "equivocation ends" in MESH.lower() or 'equivocation: "ends-peer"' in MESH
+    assert "emit last locally" in MESH.lower() or 'emit_last: "locally"' in MESH
+    assert "phoenix local only" in MESH.lower() or 'phoenix: "local-only"' in MESH
+    assert "no-auto-splice" in MESH
+    assert "not-poison" in MESH
+    assert '"1s"' in MESH and '"777s"' in MESH
+    assert 'COLD_COPY_SURVIVAL_SPEC = "COLD-COPY-SURVIVAL-1.0"' in MESH
+    assert 'COLD_COPY_SURVIVAL_TITLE = "COLD-COPY SURVIVAL"' in MESH
+    assert "export const COLD_COPY_SURVIVAL" in MESH
+    assert "multiply_cold_copies: true" in MESH
+    assert "live_body_sync: false" in MESH
+    assert "tip_expensive_to_erase: true" in MESH
+    assert "server_pull_wipes_cold_replicas: false" in MESH
+    assert "hash-absolute-refuse" in MESH
+    assert "data_outlives_creators: true" in MESH
+    assert "export function meshLawRefuse" in MESH
+    assert "export function meshLawRefuseFromPath" in MESH
+    assert "STW-REFUSE" in MESH
+    assert "CCS-REFUSE" in MESH
+    assert "SPLIT THE WIRES" in MESH.split("export const MESH_NOTE", 1)[1][:800]
+    assert "COLD-COPY SURVIVAL" in MESH.split("export const MESH_NOTE", 1)[1][:800]
+
+
 def test_mesh_contract_default_off_qnm_law() -> None:
     assert 'QNM_SPEC = "QNM-BUILD-1.0"' in MESH
     assert "MESH_DEFAULT_OFF = true" in MESH
@@ -56,7 +88,10 @@ def test_runtime_attaches_qns_cd_on_live_nodes() -> None:
     assert "mesh: meshPointer()" in RUNTIME
     assert "attachQnsCd" in RUNTIME
     assert "isMeshCrossMapPath" in RUNTIME
+    assert "meshLawRefuseFromPath" in RUNTIME
     assert "QNS-CD-1.0" in RUNTIME
+    assert "SPLIT THE WIRES" in RUNTIME
+    assert "COLD-COPY SURVIVAL" in RUNTIME
     assert "No public qnsd proxy" in RUNTIME or "no public qnsd proxy" in RUNTIME.lower()
 
 
@@ -64,6 +99,8 @@ def test_docs_cite_qns_cd() -> None:
     for text in (README, SKILL, WORKER_README, AGENTS, UI):
         assert "QNS-CD-1.0" in text
         assert "/v1/mesh" in text
+        assert "SPLIT THE WIRES" in text
+        assert "COLD-COPY SURVIVAL" in text
     assert "photon QNS1 packet transfer" in README
     assert "photon QNS1 packet transfer" in SKILL
     assert "qnm-node" in README
