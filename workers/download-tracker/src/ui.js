@@ -68,7 +68,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     <span class="badge">Live Nodes</span>
     <span id="nodesState" class="on">Mesh ON</span>
     <span id="nodesRollup"></span>
-    <span id="nodesList">Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
+    <span id="nodesList">Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -98,7 +98,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
       <div class="cite">
         AI path is FragGate only: <code>POST /v1/fraggate/call</code> slug=<b>azhub</b><br>
         Door paths proxy to aziel-runtime. Local ops are <code>/v1/{op}</code> only.<br>
-        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Read-only Live Nodes from runtime status. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. Not a Node Gate. Not a publish path.<br>
+        Suite mesh <code>/v1/mesh/*</code> PROXIES (AZIEL_RUNTIME or HTTPS). Read-only Live Nodes from runtime status. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. Not a Node Gate. Not a publish path.<br>
         <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">/mcp pointer</a> · <a href="/ai">AI</a> · <a href="/v1/skill">skill</a> · <a href="/v1/mesh">/v1/mesh</a><br>
         Separate software (one FragGate door): <a href="https://github.com/AzielEliab/azinterface">AZInterface</a> ·
         <a href="https://github.com/AzielEliab/azbrowser">AZBrowser</a> ·
@@ -314,8 +314,8 @@ function paintMesh(j) {
   listEl.textContent = labels.length
     ? labels.join(" · ")
     : (live
-      ? (live + " Live Nodes. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.")
-      : "Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.");
+      ? (live + " Live Nodes. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.")
+      : "Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.");
 }
 async function meshJson(path, init) {
   const headers = { "user-agent": "Mozilla/5.0" };

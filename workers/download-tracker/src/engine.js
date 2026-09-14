@@ -326,8 +326,8 @@ and \`/v1/mesh/*\` PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS
 fallback). Suite mesh default OFF. QNM-BUILD-1.0 + QNS-CD-1.0
 (photon QNS1 packet transfer) is a hub cite / Worker mesh
 cross-map only — not a Softwares-tab product. SPLIT THE WIRES +
-COLD-COPY SURVIVAL are mesh status/refuse law — not Softwares-tab
-products. No public qnsd proxy. Not a Node Gate. Not anonymity.
+COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE are mesh status/refuse
+law — not Softwares-tab products. No public qnsd proxy. Not a Node Gate. Not anonymity.
 Anon-broadcast is not a publish path. \`GET|POST /mcp\` here is a
 pointer, not a second MCP.
 

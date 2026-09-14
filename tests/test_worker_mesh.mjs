@@ -1,6 +1,6 @@
 /**
  * QNS-CD-1.0 / QNM Live Nodes cross-map on the AZHub Worker
- * plus SPLIT THE WIRES and COLD-COPY SURVIVAL status/refuse law.
+ * plus SPLIT THE WIRES, COLD-COPY SURVIVAL, and RE-EXPAND-FROM-ARCHIVE.
  * Mesh stays default OFF. No Node Gate. No public qnsd proxy.
  */
 import assert from "node:assert/strict";
@@ -24,6 +24,8 @@ import {
   QNM_SPEC,
   QNS_CD,
   QNS_CD_SPEC,
+  RE_EXPAND_FROM_ARCHIVE,
+  RE_EXPAND_FROM_ARCHIVE_SPEC,
   SPLIT_THE_WIRES,
   SPLIT_THE_WIRES_SPEC,
 } from "../workers/download-tracker/src/mesh.js";
@@ -45,6 +47,7 @@ assert.match(MESH_NOTE, /QNS-CD-1\.0/);
 assert.match(MESH_NOTE, /photon QNS1 packet transfer/);
 assert.match(MESH_NOTE, /SPLIT THE WIRES/);
 assert.match(MESH_NOTE, /COLD-COPY SURVIVAL/);
+assert.match(MESH_NOTE, /RE-EXPAND-FROM-ARCHIVE/);
 assert.equal(QNM_SPEC, "QNM-BUILD-1.0");
 assert.equal(MESH_DEFAULT_OFF, true);
 assert.equal(MESH_NODE_GATE, false);
@@ -72,6 +75,15 @@ assert.equal(COLD_COPY_SURVIVAL.poison, "hash-absolute-refuse");
 assert.equal(COLD_COPY_SURVIVAL.data_outlives_creators, true);
 assert.equal(COLD_COPY_SURVIVAL.softwares_tab, false);
 assert.equal(SPLIT_THE_WIRES.softwares_tab, false);
+assert.equal(RE_EXPAND_FROM_ARCHIVE_SPEC, "RE-EXPAND-FROM-ARCHIVE-1.0");
+assert.equal(RE_EXPAND_FROM_ARCHIVE.title, "RE-EXPAND-FROM-ARCHIVE");
+assert.equal(RE_EXPAND_FROM_ARCHIVE.chain_survives, "bytes");
+assert.equal(RE_EXPAND_FROM_ARCHIVE.summaries_are_not_chain, true);
+assert.equal(RE_EXPAND_FROM_ARCHIVE.re_expand, "archive-verify-and-local-node");
+assert.equal(RE_EXPAND_FROM_ARCHIVE.re_expand_not, "mesh-from-index");
+assert.equal(RE_EXPAND_FROM_ARCHIVE.crawlers_re_expand, false);
+assert.equal(RE_EXPAND_FROM_ARCHIVE.weights_are_tarball, false);
+assert.equal(RE_EXPAND_FROM_ARCHIVE.softwares_tab, false);
 
 assert.equal(isMeshCrossMapPath("/v1/mesh"), true);
 assert.equal(isMeshCrossMapPath("/v1/mesh/status/"), true);
@@ -87,9 +99,11 @@ assert.equal(empty.qns_cd_spec, QNS_CD_SPEC);
 assert.equal(empty.qns_cd.spec, QNS_CD_SPEC);
 assert.equal(empty.split_the_wires_spec, SPLIT_THE_WIRES_SPEC);
 assert.equal(empty.cold_copy_survival_spec, COLD_COPY_SURVIVAL_SPEC);
+assert.equal(empty.re_expand_from_archive_spec, RE_EXPAND_FROM_ARCHIVE_SPEC);
 assert.match(empty.note, /QNS-CD-1\.0/);
 assert.match(empty.note, /SPLIT THE WIRES/);
 assert.match(empty.note, /COLD-COPY SURVIVAL/);
+assert.match(empty.note, /RE-EXPAND-FROM-ARCHIVE/);
 
 const decorated = attachQnsCd({ ok: true, enabled: false, via: "binding", live_nodes: 0 });
 assert.equal(decorated.ok, true);
@@ -99,6 +113,7 @@ assert.equal(decorated.qns_cd_spec, "QNS-CD-1.0");
 assert.equal(decorated.qns_cd.public_qnsd_proxy, false);
 assert.equal(decorated.split_the_wires.title, "SPLIT THE WIRES");
 assert.equal(decorated.cold_copy_survival.title, "COLD-COPY SURVIVAL");
+assert.equal(decorated.re_expand_from_archive.title, "RE-EXPAND-FROM-ARCHIVE");
 
 const pub = publicMesh({ enabled: false });
 assert.equal(pub.enabled, false);
@@ -106,6 +121,7 @@ assert.equal(pub.live_nodes, 0);
 assert.equal(pub.qns_cd_spec, "QNS-CD-1.0");
 assert.equal(pub.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
 assert.equal(pub.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
+assert.equal(pub.re_expand_from_archive_spec, "RE-EXPAND-FROM-ARCHIVE-1.0");
 assert.equal(pub.product, "azhub");
 
 const pointer = meshPointer();
@@ -118,15 +134,18 @@ assert.equal(pointer.qns_cd_spec, "QNS-CD-1.0");
 assert.equal(pointer.qns_cd.softwares_tab, false);
 assert.equal(pointer.split_the_wires.softwares_tab, false);
 assert.equal(pointer.cold_copy_survival.softwares_tab, false);
+assert.equal(pointer.re_expand_from_archive.softwares_tab, false);
 assert.match(pointer.note, /QNS-CD-1\.0/);
 assert.match(pointer.note, /SPLIT THE WIRES/);
 assert.match(pointer.note, /COLD-COPY SURVIVAL/);
+assert.match(pointer.note, /RE-EXPAND-FROM-ARCHIVE/);
 assert.match(pointer.note, /qnm-node/);
 
 assert.equal(alignLiveNodes({ mesh: { enabled: false, live_nodes: 9 } }), 0);
 assert.match(meshStatusLine({ enabled: false }), /QNS-CD-1\.0/);
 assert.match(meshStatusLine({ enabled: false }), /SPLIT THE WIRES/);
 assert.match(meshStatusLine({ enabled: false }), /COLD-COPY SURVIVAL/);
+assert.match(meshStatusLine({ enabled: false }), /RE-EXPAND-FROM-ARCHIVE/);
 
 const parsed = parseMeshDoc({ ok: true, enabled: false, live_nodes: 3, rollup: { live: 3, locked: 1, isolated: 0 } });
 assert.equal(parsed.enabled, false);
@@ -134,6 +153,7 @@ assert.equal(parsed.live_nodes, 0);
 assert.equal(parsed.qns_cd.spec, "QNS-CD-1.0");
 assert.equal(parsed.split_the_wires.spec, "SPLIT-THE-WIRES-1.0");
 assert.equal(parsed.cold_copy_survival.spec, "COLD-COPY-SURVIVAL-1.0");
+assert.equal(parsed.re_expand_from_archive.spec, "RE-EXPAND-FROM-ARCHIVE-1.0");
 
 assert.equal(meshLawRefuse("status"), null);
 assert.equal(meshLawRefuse("join"), null);
@@ -171,4 +191,22 @@ const poison = meshLawRefuse("interpret poison");
 assert.equal(poison.code, "CCS-REFUSE");
 assert.equal(poison.cold_copy_survival.poison, "hash-absolute-refuse");
 
-console.log("worker mesh QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL ok");
+const rea = meshLawRefuse("re-expand-from-index");
+assert.equal(rea.ok, false);
+assert.equal(rea.code, "REA-REFUSE");
+assert.equal(rea.reason, "re_expand_from_index");
+assert.equal(rea.re_expand_from_archive.re_expand, "archive-verify-and-local-node");
+assert.equal(rea.re_expand_from_archive.re_expand_not, "mesh-from-index");
+assert.equal(rea.re_expand_from_archive.chain_survives, "bytes");
+assert.equal(rea.re_expand_from_archive.crawlers_re_expand, false);
+assert.equal(rea.re_expand_from_archive.weights_are_tarball, false);
+
+const crawler = meshLawRefuseFromPath("/v1/mesh/crawler-re-expand");
+assert.equal(crawler.code, "REA-REFUSE");
+assert.equal(crawler.reason, "crawler_re_expand");
+
+const weights = meshLawRefuse("weights as tarball");
+assert.equal(weights.code, "REA-REFUSE");
+assert.equal(weights.reason, "weights_as_tarball");
+
+console.log("worker mesh QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE ok");
