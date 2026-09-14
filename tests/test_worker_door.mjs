@@ -162,6 +162,10 @@ try {
   assert.equal(meshBody.qns_cd.spec, "QNS-CD-1.0");
   assert.equal(meshBody.qns_cd.public_qnsd_proxy, false);
   assert.equal(meshBody.qns_cd.softwares_tab, false);
+  assert.equal(meshBody.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
+  assert.equal(meshBody.split_the_wires.title, "SPLIT THE WIRES");
+  assert.equal(meshBody.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
+  assert.equal(meshBody.cold_copy_survival.title, "COLD-COPY SURVIVAL");
   assert.equal(meshRes.headers.get("X-Aziel-Door"), "proxy");
   assert.ok(fetches.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/status" && f.method === "GET"));
 
@@ -187,6 +191,8 @@ try {
   assert.equal(meshBoundBody.via, "binding");
   assert.equal(meshBoundBody.qns_cd_spec, "QNS-CD-1.0");
   assert.equal(meshBoundBody.qns_cd.local_daemon.coded_in, "https://github.com/AzielEliab/qnm-node");
+  assert.equal(meshBoundBody.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
+  assert.equal(meshBoundBody.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
   assert.equal(fetches.length, 0, "AZIEL_RUNTIME binding must win over HTTPS fallback");
   assert.ok(boundCalls.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/nodes"));
 
@@ -208,8 +214,35 @@ try {
   assert.match(mcp.mesh.anon_broadcast, /not a publish path/);
   assert.equal(mcp.mesh.qns_cd_spec, "QNS-CD-1.0");
   assert.equal(mcp.mesh.qns_cd.spec, "QNS-CD-1.0");
+  assert.equal(mcp.mesh.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
+  assert.equal(mcp.mesh.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
   assert.match(mcp.note, /mesh/);
   assert.match(mcp.note, /QNS-CD-1\.0/);
+  assert.match(mcp.note, /SPLIT THE WIRES/);
+  assert.match(mcp.note, /COLD-COPY SURVIVAL/);
+
+  const stwReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/mesh/auto_splice", {
+    method: "POST",
+    headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0" },
+    body: "{}",
+  });
+  const stwRes = await handleRuntimeApi(stwReq, new URL(stwReq.url), {});
+  const stwBody = await stwRes.json();
+  assert.equal(stwRes.status, 403);
+  assert.equal(stwBody.ok, false);
+  assert.equal(stwBody.code, "STW-REFUSE");
+  assert.equal(stwBody.reason, "auto_splice");
+
+  const ccsReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/mesh/live_body_sync", {
+    method: "POST",
+    headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0" },
+    body: "{}",
+  });
+  const ccsRes = await handleRuntimeApi(ccsReq, new URL(ccsReq.url), {});
+  const ccsBody = await ccsRes.json();
+  assert.equal(ccsRes.status, 403);
+  assert.equal(ccsBody.code, "CCS-REFUSE");
+  assert.equal(ccsBody.reason, "live_body_sync");
 
   for (const path of ["/count", "/stats", "/download", "/"]) {
     const req = new Request("https://azhub-download-tracker.vibelock.workers.dev" + path, { method: "GET" });

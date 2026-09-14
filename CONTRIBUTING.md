@@ -37,9 +37,10 @@ Python 3.10+. Engine is stdlib only. pytest is the dev extra.
    `/v1/mesh/*` PROXY to aziel-runtime. Local ops are `/v1/{op}` only.
    Never treat `fraggate/call` or `mesh` as a local op name. Suite mesh
    stays OFF until runtime enable. QNS-CD-1.0 is a hub cite / Worker
-   mesh cross-map only (not a Softwares-tab product). No public qnsd
-   proxy. No Node Gate. No auto-heal. Anon-broadcast is not a publish
-   path.
+   mesh cross-map only (not a Softwares-tab product). SPLIT THE WIRES
+   + COLD-COPY SURVIVAL are mesh status/refuse law (not Softwares-tab
+   products). No public qnsd proxy. No Node Gate. No auto-heal.
+   Anon-broadcast is not a publish path.
 10. New behavior needs a test that fails without the change.
 
 ## Where to change things
@@ -48,7 +49,7 @@ Python 3.10+. Engine is stdlib only. pytest is the dev extra.
 - Door path classifier: `azhub/door.py` + `workers/download-tracker/src/door.js`
 - Worker engine (same ops): `workers/download-tracker/src/engine.js`
 - OpenAPI / door proxy: `workers/download-tracker/src/runtime.js`
-- Suite mesh / QNS-CD-1.0 cross-map: `workers/download-tracker/src/mesh.js`
+- Suite mesh / QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL: `workers/download-tracker/src/mesh.js`
 - Blank Key chrome: `workers/download-tracker/src/ui.js`
 - Spec: `docs/whitepaper.md`
 - Skill: `SKILL.md` (same text at Worker `GET /v1/skill`)
