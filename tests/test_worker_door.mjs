@@ -166,6 +166,8 @@ try {
   assert.equal(meshBody.split_the_wires.title, "SPLIT THE WIRES");
   assert.equal(meshBody.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
   assert.equal(meshBody.cold_copy_survival.title, "COLD-COPY SURVIVAL");
+  assert.equal(meshBody.re_expand_from_archive_spec, "RE-EXPAND-FROM-ARCHIVE-1.0");
+  assert.equal(meshBody.re_expand_from_archive.title, "RE-EXPAND-FROM-ARCHIVE");
   assert.equal(meshRes.headers.get("X-Aziel-Door"), "proxy");
   assert.ok(fetches.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/status" && f.method === "GET"));
 
@@ -193,6 +195,7 @@ try {
   assert.equal(meshBoundBody.qns_cd.local_daemon.coded_in, "https://github.com/AzielEliab/qnm-node");
   assert.equal(meshBoundBody.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
   assert.equal(meshBoundBody.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
+  assert.equal(meshBoundBody.re_expand_from_archive_spec, "RE-EXPAND-FROM-ARCHIVE-1.0");
   assert.equal(fetches.length, 0, "AZIEL_RUNTIME binding must win over HTTPS fallback");
   assert.ok(boundCalls.some((f) => f.url === DEFAULT_RUNTIME_ORIGIN + "/v1/mesh/nodes"));
 
@@ -216,10 +219,12 @@ try {
   assert.equal(mcp.mesh.qns_cd.spec, "QNS-CD-1.0");
   assert.equal(mcp.mesh.split_the_wires_spec, "SPLIT-THE-WIRES-1.0");
   assert.equal(mcp.mesh.cold_copy_survival_spec, "COLD-COPY-SURVIVAL-1.0");
+  assert.equal(mcp.mesh.re_expand_from_archive_spec, "RE-EXPAND-FROM-ARCHIVE-1.0");
   assert.match(mcp.note, /mesh/);
   assert.match(mcp.note, /QNS-CD-1\.0/);
   assert.match(mcp.note, /SPLIT THE WIRES/);
   assert.match(mcp.note, /COLD-COPY SURVIVAL/);
+  assert.match(mcp.note, /RE-EXPAND-FROM-ARCHIVE/);
 
   const stwReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/mesh/auto_splice", {
     method: "POST",
@@ -243,6 +248,18 @@ try {
   assert.equal(ccsRes.status, 403);
   assert.equal(ccsBody.code, "CCS-REFUSE");
   assert.equal(ccsBody.reason, "live_body_sync");
+
+  const reaReq = new Request("https://azhub-download-tracker.vibelock.workers.dev/v1/mesh/re-expand-from-index", {
+    method: "POST",
+    headers: { "content-type": "application/json", "user-agent": "Mozilla/5.0" },
+    body: "{}",
+  });
+  const reaRes = await handleRuntimeApi(reaReq, new URL(reaReq.url), {});
+  const reaBody = await reaRes.json();
+  assert.equal(reaRes.status, 403);
+  assert.equal(reaBody.code, "REA-REFUSE");
+  assert.equal(reaBody.reason, "re_expand_from_index");
+  assert.match(reaBody.note, /Bytes of chain survive/);
 
   for (const path of ["/count", "/stats", "/download", "/"]) {
     const req = new Request("https://azhub-download-tracker.vibelock.workers.dev" + path, { method: "GET" });

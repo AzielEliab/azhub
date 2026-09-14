@@ -84,7 +84,7 @@ a{{color:var(--gold)}}
     <span class="badge">Live Nodes</span>
     <span id="nodesState" class="on">Mesh ON</span>
     <span id="nodesRollup"></span>
-    <span id="nodesList">Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
+    <span id="nodesList">Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.</span>
   </div>
   <div id="body">
     <aside id="palette">
@@ -107,7 +107,7 @@ a{{color:var(--gold)}}
       <h2>Receipts</h2>
       <div id="receipts"></div>
       <h2>FragGate</h2>
-      <div class="cite">AI path is FragGate only. This chrome is human software. Suite mesh <code>/v1/mesh/*</code> PROXIES to aziel-runtime. Read-only Live Nodes from runtime status. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. Not a Node Gate. Not a publish path. AZInterface, AZBrowser, and AZNet are separate software under one FragGate door.</div>
+      <div class="cite">AI path is FragGate only. This chrome is human software. Suite mesh <code>/v1/mesh/*</code> PROXIES to aziel-runtime. Read-only Live Nodes from runtime status. QNS-CD-1.0 (photon QNS1 packet transfer) hub cite / Worker mesh cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. Not a Node Gate. Not a publish path. AZInterface, AZBrowser, and AZNet are separate software under one FragGate door.</div>
     </aside>
   </div>
   <div id="status">AZHub {__version__} local · AIH-WP-1.0 · Blank Key · not Interface · 127.0.0.1:{PORT}</div>
@@ -305,8 +305,8 @@ function paintMesh(j) {{
   listEl.textContent = labels.length
     ? labels.join(" · ")
     : (live
-      ? (live + " Live Nodes. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.")
-      : "Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.");
+      ? (live + " Live Nodes. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.")
+      : "Live Nodes from runtime. QNS-CD-1.0 cross-map only. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE status/refuse. Presence only — not anonymity. Anon-broadcast is not a publish path.");
 }}
 async function meshJson(path, init) {{
   const headers = {{ "user-agent": "Mozilla/5.0" }};

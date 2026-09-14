@@ -1,14 +1,16 @@
 /**
  * Suite node mesh — QNM-BUILD-1.0 Live Nodes contract
  * plus QNS-CD-1.0 (photon QNS1 packet transfer) cross-map
- * plus SPLIT THE WIRES and COLD-COPY SURVIVAL status/refuse law.
+ * plus SPLIT THE WIRES, COLD-COPY SURVIVAL, and RE-EXPAND-FROM-ARCHIVE
+ * status/refuse law.
  *
  * Default OFF. Public rollup is live|locked|isolated counts only.
  * No Node Gate. No auto-heal. Not an anonymity network.
  * No public qnsd proxy. This Worker does not implement qnsd.
  * /v1/mesh/* PROXY to aziel-runtime (AZIEL_RUNTIME or HTTPS fallback).
  * Hub cite / Worker mesh cross-map only — not a Softwares-tab product.
- * SPLIT THE WIRES and COLD-COPY SURVIVAL are mesh status/refuse only.
+ * SPLIT THE WIRES, COLD-COPY SURVIVAL, and RE-EXPAND-FROM-ARCHIVE
+ * are mesh status/refuse only.
  * Author: Aziel Eliab only.
  */
 import { FRAGGATE_CALL, FRAGGATE_MCP, IDENTITY, RUNTIME } from "./engine.js";
@@ -134,8 +136,40 @@ export const COLD_COPY_SURVIVAL = Object.freeze({
   note: "COLD-COPY SURVIVAL. Multiply cold copies. Refuse live body sync. Tip is expensive to erase. Server pull cannot wipe cold replicas. Hash-absolute poison refuse. Data outlives creators. Status/refuse only — not a Softwares-tab product. Author: Aziel Eliab only.",
 });
 
+/** RE-EXPAND-FROM-ARCHIVE — mesh status/refuse law. Not a Softwares-tab product. */
+export const RE_EXPAND_FROM_ARCHIVE_SPEC = "RE-EXPAND-FROM-ARCHIVE-1.0";
+export const RE_EXPAND_FROM_ARCHIVE_TITLE = "RE-EXPAND-FROM-ARCHIVE";
+export const RE_EXPAND_FROM_ARCHIVE_REFUSE_CODE = "REA-REFUSE";
+
+export const RE_EXPAND_FROM_ARCHIVE = Object.freeze({
+  spec: RE_EXPAND_FROM_ARCHIVE_SPEC,
+  title: RE_EXPAND_FROM_ARCHIVE_TITLE,
+  kind: "mesh-law",
+  author: MESH_IDENTITY,
+  identity: MESH_IDENTITY,
+  softwares_tab: false,
+  product_door: false,
+  chain_survives: "bytes",
+  summaries_are_not_chain: true,
+  re_expand: "archive-verify-and-local-node",
+  re_expand_not: "mesh-from-index",
+  crawlers_re_expand: false,
+  weights_are_tarball: false,
+  refuse: Object.freeze([
+    "re_expand",
+    "re_expand_from_archive",
+    "re_expand_from_index",
+    "re_expand_from_mesh",
+    "mesh_from_index",
+    "crawler_re_expand",
+    "summary_as_chain",
+    "weights_as_tarball",
+  ]),
+  note: "RE-EXPAND-FROM-ARCHIVE. Bytes of chain survive, not summaries. Re-expand is archive verify + local node — not mesh from index. Crawlers do not re-expand. Weights are not a tarball. Status/refuse only — not a Softwares-tab product. Author: Aziel Eliab only.",
+});
+
 export const MESH_NOTE =
-  "QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL. Suite mesh default off. Live|locked|isolated counts only. No Node Gate. No public qnsd proxy. No auto-heal. Not an anonymity network. Author: Aziel Eliab only.";
+  "QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE. Suite mesh default off. Live|locked|isolated counts only. No Node Gate. No public qnsd proxy. No auto-heal. Not an anonymity network. Author: Aziel Eliab only.";
 
 export const MESH_OPS = Object.freeze([
   "status",
@@ -149,9 +183,9 @@ export const MESH_OPS = Object.freeze([
 ]);
 
 export const MESH_PROXY_ROUTES = Object.freeze([
-  { path: MESH_PATH, methods: ["get", "head"], op: "status", summary: "PROXY to aziel-runtime GET /v1/mesh. Suite mesh status. Default OFF. QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL attached. Not a local op. Not a public qnsd proxy." },
-  { path: MESH_STATUS_PATH, methods: ["get"], op: "status", summary: "PROXY alias of GET /v1/mesh. QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL attached. Not a local op." },
-  { path: MESH_NODES_PATH, methods: ["get"], op: "nodes", summary: "PROXY to aziel-runtime GET /v1/mesh/nodes. Live Nodes (5-minute presence). QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL attached. Not a local op." },
+  { path: MESH_PATH, methods: ["get", "head"], op: "status", summary: "PROXY to aziel-runtime GET /v1/mesh. Suite mesh status. Default OFF. QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE attached. Not a local op. Not a public qnsd proxy." },
+  { path: MESH_STATUS_PATH, methods: ["get"], op: "status", summary: "PROXY alias of GET /v1/mesh. QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE attached. Not a local op." },
+  { path: MESH_NODES_PATH, methods: ["get"], op: "nodes", summary: "PROXY to aziel-runtime GET /v1/mesh/nodes. Live Nodes (5-minute presence). QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE attached. Not a local op." },
   { path: MESH_ENABLE_PATH, methods: ["post"], op: "enable", summary: "PROXY to aziel-runtime POST /v1/mesh/enable. Operator bearer required. Rate-limited. Not a local op." },
   { path: MESH_DISABLE_PATH, methods: ["post"], op: "disable", summary: "PROXY to aziel-runtime POST /v1/mesh/disable. Always allowed. Not a local op." },
   { path: MESH_JOIN_PATH, methods: ["post"], op: "join", summary: "PROXY to aziel-runtime POST /v1/mesh/join. Body {product, node_id?, label?, presence?}. Refused while OFF. Not a local op." },
@@ -239,6 +273,7 @@ export function splitTheWiresRefuse(reason, extra = {}) {
     identity: MESH_IDENTITY,
     split_the_wires: SPLIT_THE_WIRES,
     cold_copy_survival: COLD_COPY_SURVIVAL,
+    re_expand_from_archive: RE_EXPAND_FROM_ARCHIVE,
     note: SPLIT_THE_WIRES.note,
     ...extra,
   };
@@ -257,6 +292,7 @@ export function coldCopySurvivalRefuse(reason, extra = {}) {
     identity: MESH_IDENTITY,
     split_the_wires: SPLIT_THE_WIRES,
     cold_copy_survival: COLD_COPY_SURVIVAL,
+    re_expand_from_archive: RE_EXPAND_FROM_ARCHIVE,
     note: COLD_COPY_SURVIVAL.note,
     ...extra,
   };
@@ -268,7 +304,27 @@ export function meshLawRefuse(op, extra = {}) {
   if (!key) return null;
   if (SPLIT_THE_WIRES.refuse.includes(key)) return splitTheWiresRefuse(key, extra);
   if (COLD_COPY_SURVIVAL.refuse.includes(key)) return coldCopySurvivalRefuse(key, extra);
+  if (RE_EXPAND_FROM_ARCHIVE.refuse.includes(key)) return reExpandFromArchiveRefuse(key, extra);
   return null;
+}
+
+export function reExpandFromArchiveRefuse(reason, extra = {}) {
+  const key = meshLawKey(reason) || "re-expand-from-archive";
+  return {
+    ok: false,
+    refused: true,
+    code: RE_EXPAND_FROM_ARCHIVE_REFUSE_CODE,
+    spec: RE_EXPAND_FROM_ARCHIVE_SPEC,
+    title: RE_EXPAND_FROM_ARCHIVE_TITLE,
+    reason: key,
+    author: MESH_IDENTITY,
+    identity: MESH_IDENTITY,
+    split_the_wires: SPLIT_THE_WIRES,
+    cold_copy_survival: COLD_COPY_SURVIVAL,
+    re_expand_from_archive: RE_EXPAND_FROM_ARCHIVE,
+    note: RE_EXPAND_FROM_ARCHIVE.note,
+    ...extra,
+  };
 }
 
 export function meshLawOpFromPath(pathname) {
@@ -282,7 +338,7 @@ export function meshLawRefuseFromPath(pathname) {
   return meshLawRefuse(meshLawOpFromPath(pathname));
 }
 
-/** Attach QNS-CD-1.0 plus SPLIT THE WIRES and COLD-COPY SURVIVAL on status / Live Nodes. */
+/** Attach QNS-CD-1.0 plus SPLIT THE WIRES, COLD-COPY SURVIVAL, and RE-EXPAND-FROM-ARCHIVE. */
 export function attachQnsCd(doc) {
   const base = doc && typeof doc === "object" && !Array.isArray(doc) ? { ...doc } : {};
   return {
@@ -293,6 +349,8 @@ export function attachQnsCd(doc) {
     split_the_wires: SPLIT_THE_WIRES,
     cold_copy_survival_spec: COLD_COPY_SURVIVAL_SPEC,
     cold_copy_survival: COLD_COPY_SURVIVAL,
+    re_expand_from_archive_spec: RE_EXPAND_FROM_ARCHIVE_SPEC,
+    re_expand_from_archive: RE_EXPAND_FROM_ARCHIVE,
   };
 }
 
@@ -392,7 +450,7 @@ export function parseMeshDoc(body) {
     source: inner.source || "parsed",
     door: inner.door || MESH_PATH,
     note: enabled
-      ? "QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL. Suite mesh is on. Live|locked|isolated counts only. No Node Gate. No public qnsd proxy. No auto-heal. Not an anonymity network."
+      ? "QNM-BUILD-1.0 + QNS-CD-1.0 (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE. Suite mesh is on. Live|locked|isolated counts only. No Node Gate. No public qnsd proxy. No auto-heal. Not an anonymity network."
       : MESH_NOTE,
   });
 }
@@ -438,12 +496,12 @@ export function meshStatusLine(mesh) {
   const m = mesh && typeof mesh === "object" ? mesh : emptyMesh();
   if (m.enabled) {
     const r = meshRollup(m);
-    return "Suite mesh: on · live " + r.live + " · locked " + r.locked + " · isolated " + r.isolated + ". QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL. Not an anonymity network.";
+    return "Suite mesh: on · live " + r.live + " · locked " + r.locked + " · isolated " + r.isolated + ". QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE. Not an anonymity network.";
   }
   if (m.status === "unavailable") {
-    return "Suite mesh: off (unavailable). QNM-BUILD-1.0 + QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL. Not an anonymity network.";
+    return "Suite mesh: off (unavailable). QNM-BUILD-1.0 + QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE. Not an anonymity network.";
   }
-  return "Suite mesh: off (default). QNM-BUILD-1.0 + QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL. Not an anonymity network.";
+  return "Suite mesh: off (default). QNM-BUILD-1.0 + QNS-CD-1.0. SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE. Not an anonymity network.";
 }
 
 /** Public Live Nodes count. Never auto-heal a visiting floor. */
@@ -471,7 +529,7 @@ export function meshPointer() {
     catalog_mcp: FRAGGATE_MCP,
     fraggate_slug: MESH_SLUG,
     origin: RUNTIME + MESH_PATH,
-    note: "PROXY to aziel-runtime /v1/mesh/* via AZIEL_RUNTIME or HTTPS fallback. Not a local op. Not AnonBroadcast. Not AZMail's product-local ring. AZHub remains a Blank Key (AIH-WP-1.0). Full node process is local qnm-node/. QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. " + MESH_NOTE,
+    note: "PROXY to aziel-runtime /v1/mesh/* via AZIEL_RUNTIME or HTTPS fallback. Not a local op. Not AnonBroadcast. Not AZMail's product-local ring. AZHub remains a Blank Key (AIH-WP-1.0). Full node process is local qnm-node/. QNS-CD-1.0 is a hub cite / Worker mesh cross-map only (photon QNS1 packet transfer). SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE are mesh status/refuse law — not Softwares-tab products. No public qnsd proxy. " + MESH_NOTE,
     anon_broadcast: "not a publish path",
     anon_broadcast_repo: ANON_BROADCAST,
     anon_broadcast_publish_path: false,
@@ -487,7 +545,7 @@ export function meshOpenApiPaths() {
         operationId: "azhub_mesh_" + route.op + (method === "head" ? "_head" : "") + "_proxy",
         summary: route.summary,
         tags: ["mesh"],
-        responses: { "200": { description: "aziel-runtime mesh envelope + QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL on GET status/nodes" } },
+        responses: { "200": { description: "aziel-runtime mesh envelope + QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE on GET status/nodes" } },
       };
       if (method === "post") {
         entry[method].requestBody = { content: { "application/json": { schema: { type: "object" } } } };

@@ -1,7 +1,7 @@
 """Suite mesh Live Nodes + QNS-CD-1.0 + mesh-law contract.
 
 Default OFF. live|locked|isolated. No Node Gate. No public qnsd proxy.
-SPLIT THE WIRES + COLD-COPY SURVIVAL are status/refuse only.
+SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE are status/refuse only.
 Hub cite / Worker mesh cross-map only — not a Softwares-tab product.
 """
 
@@ -64,6 +64,27 @@ def test_mesh_exports_split_the_wires_and_cold_copy_survival() -> None:
     assert "COLD-COPY SURVIVAL" in MESH.split("export const MESH_NOTE", 1)[1][:800]
 
 
+def test_mesh_exports_re_expand_from_archive() -> None:
+    assert 'RE_EXPAND_FROM_ARCHIVE_SPEC = "RE-EXPAND-FROM-ARCHIVE-1.0"' in MESH
+    assert 'RE_EXPAND_FROM_ARCHIVE_TITLE = "RE-EXPAND-FROM-ARCHIVE"' in MESH
+    assert "export const RE_EXPAND_FROM_ARCHIVE" in MESH
+    assert "export function reExpandFromArchiveRefuse" in MESH
+    assert "REA-REFUSE" in MESH
+    assert "bytes of chain survive" in MESH.lower()
+    assert "not summaries" in MESH.lower()
+    assert "archive verify + local node" in MESH.lower()
+    assert "not mesh from index" in MESH.lower()
+    assert "crawlers do not re-expand" in MESH.lower()
+    assert "weights are not a tarball" in MESH.lower()
+    assert 'chain_survives: "bytes"' in MESH
+    assert "summaries_are_not_chain: true" in MESH
+    assert 're_expand: "archive-verify-and-local-node"' in MESH
+    assert 're_expand_not: "mesh-from-index"' in MESH
+    assert "crawlers_re_expand: false" in MESH
+    assert "weights_are_tarball: false" in MESH
+    assert "RE-EXPAND-FROM-ARCHIVE" in MESH.split("export const MESH_NOTE", 1)[1][:800]
+
+
 def test_mesh_contract_default_off_qnm_law() -> None:
     assert 'QNM_SPEC = "QNM-BUILD-1.0"' in MESH
     assert "MESH_DEFAULT_OFF = true" in MESH
@@ -92,6 +113,7 @@ def test_runtime_attaches_qns_cd_on_live_nodes() -> None:
     assert "QNS-CD-1.0" in RUNTIME
     assert "SPLIT THE WIRES" in RUNTIME
     assert "COLD-COPY SURVIVAL" in RUNTIME
+    assert "RE-EXPAND-FROM-ARCHIVE" in RUNTIME
     assert "No public qnsd proxy" in RUNTIME or "no public qnsd proxy" in RUNTIME.lower()
 
 
@@ -101,6 +123,7 @@ def test_docs_cite_qns_cd() -> None:
         assert "/v1/mesh" in text
         assert "SPLIT THE WIRES" in text
         assert "COLD-COPY SURVIVAL" in text
+        assert "RE-EXPAND-FROM-ARCHIVE" in text
     assert "photon QNS1 packet transfer" in README
     assert "photon QNS1 packet transfer" in SKILL
     assert "qnm-node" in README

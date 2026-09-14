@@ -39,7 +39,8 @@ sibling aziel-runtime PR. Human chrome uses this Worker's `/v1/{op}`
 Suite mesh default OFF until runtime enable. **QNS-CD-1.0** (photon
 QNS1 packet transfer) is a hub cite / Worker mesh cross-map only —
 not a Softwares-tab product. **SPLIT THE WIRES** + **COLD-COPY
-SURVIVAL** are mesh status/refuse law (not Softwares-tab products).
+SURVIVAL** + **RE-EXPAND-FROM-ARCHIVE** are mesh status/refuse law
+(not Softwares-tab products).
 Local qnsd lives in
 [qnm-node](https://github.com/AzielEliab/qnm-node). Runtime cites live
 in [aziel-runtime](https://github.com/AzielEliab/aziel-runtime)
@@ -96,8 +97,8 @@ Host: `https://azhub-download-tracker.vibelock.workers.dev`
 | GET | `/v1/fraggate/list` | PROXY to aziel-runtime FragGate list. |
 | POST | `/v1/fraggate/call` | PROXY to aziel-runtime FragGate call. |
 | GET/POST | `/v1/runtime/*` | PROXY aliases (`list`/`call` → FragGate). |
-| GET | `/v1/mesh` `/v1/mesh/status` `/v1/mesh/nodes` | PROXY suite mesh (default OFF). GET status/nodes attach QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL for peers. |
-| POST | `/v1/mesh/*` | PROXY join/heartbeat/leave/enable/disable/broadcast (hash receipt only; not a publish path). Illegal SPLIT THE WIRES / COLD-COPY SURVIVAL verbs refuse locally. |
+| GET | `/v1/mesh` `/v1/mesh/status` `/v1/mesh/nodes` | PROXY suite mesh (default OFF). GET status/nodes attach QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE for peers. |
+| POST | `/v1/mesh/*` | PROXY join/heartbeat/leave/enable/disable/broadcast (hash receipt only; not a publish path). Illegal SPLIT THE WIRES / COLD-COPY SURVIVAL / RE-EXPAND-FROM-ARCHIVE verbs refuse locally. |
 | GET | `/download` | Counted tarball. |
 | GET | `/count` | `{views, downloads, total}` |
 
@@ -151,6 +152,7 @@ Apache-2.0. Forks are welcome and always allowed.
 - QNS-CD-1.0: photon QNS1 packet transfer (hub cite / Worker mesh cross-map only; not a Softwares-tab product)
 - SPLIT THE WIRES: tip-only 0.5–1s tick; pull-only payload; update=proof not timer; 777s dwell after valid cite; equivocation ends peer; emit last locally; Phoenix local only; partition no auto-splice; heartbeat loss≠poison; 1s and 777s strangers
 - COLD-COPY SURVIVAL: multiply cold copies; refuse live body sync; tip expensive to erase; server pull cannot wipe cold replicas; hash-absolute poison refuse; data outlives creators
+- RE-EXPAND-FROM-ARCHIVE: bytes of chain survive, not summaries; re-expand = archive verify + local node — not mesh from index; crawlers do not re-expand; weights ≠ tarball
 - Library: https://www.azielcorpuslibrary.net/
 - AZInterface (sibling — pair custody; never collapse): https://github.com/AzielEliab/azinterface
 - AZBrowser (sibling): https://github.com/AzielEliab/azbrowser

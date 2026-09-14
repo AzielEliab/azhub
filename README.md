@@ -59,7 +59,8 @@ Worker `/v1/{op}` is the **human UI backend** (single-segment local ops).
 aziel-runtime (AZIEL_RUNTIME or HTTPS fallback). Suite mesh default
 OFF. **QNS-CD-1.0** (photon QNS1 packet transfer) is a hub cite /
 Worker mesh cross-map only — not a Softwares-tab product. **SPLIT THE
-WIRES** + **COLD-COPY SURVIVAL** are mesh status/refuse law on
+WIRES** + **COLD-COPY SURVIVAL** + **RE-EXPAND-FROM-ARCHIVE** are
+mesh status/refuse law on
 `GET /v1/mesh` (and illegal mesh verbs refuse). Not Softwares-tab
 products. Local qnsd is coded in
 [qnm-node](https://github.com/AzielEliab/qnm-node). Runtime cites live
@@ -143,7 +144,7 @@ URL pattern (same as sibling Aziel Eliab products):
 | `/v1/{op}` | Human UI backend — single-segment local ops only |
 | `/v1/fraggate/*` | PROXY to aziel-runtime FragGate door |
 | `/v1/runtime/*` | PROXY aliases (`list`/`call` → `/v1/fraggate/list`/`call`) |
-| `/v1/mesh/*` | PROXY suite node mesh (default OFF; Live Nodes strip; QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL on GET status/nodes; illegal law verbs refuse) |
+| `/v1/mesh/*` | PROXY suite node mesh (default OFF; Live Nodes strip; QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE on GET status/nodes; illegal law verbs refuse) |
 | `/robots.txt` `/sitemap.xml` `/llms.txt` `/cite.json` | Crawler + citation |
 
 - Homepage: [https://azhub-download-tracker.vibelock.workers.dev/](https://azhub-download-tracker.vibelock.workers.dev/)
@@ -180,7 +181,7 @@ Every control calls a real `/v1` handler (same op agents call). No dead buttons.
 | tether_cut | `POST /v1/tether_cut` | `tether_cut` |
 | FragGate list | `GET /v1/fraggate/list` | PROXY to aziel-runtime |
 | FragGate call | `POST /v1/fraggate/call` | PROXY to aziel-runtime |
-| Live Nodes strip | `GET /v1/mesh/status` · `GET /v1/mesh/nodes` | PROXY suite mesh (OFF until runtime enable). QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL attached for peers. |
+| Live Nodes strip | `GET /v1/mesh/status` · `GET /v1/mesh/nodes` | PROXY suite mesh (OFF until runtime enable). QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE attached for peers. |
 
 Prove locally (after `pip install -e ".[dev]"`):
 
@@ -243,7 +244,7 @@ azhub/              library (catalog, surface, engine, cli, door)
 tests/              pytest + Worker door/engine
 docs/               AIH-WP-1.0 whitepaper
 workers/download-tracker/   Cloudflare Worker azhub-download-tracker
-                    src/mesh.js  QNM Live Nodes + QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL
+                    src/mesh.js  QNM Live Nodes + QNS-CD-1.0 + SPLIT THE WIRES + COLD-COPY SURVIVAL + RE-EXPAND-FROM-ARCHIVE
 mobile/             Flutter scaffold
 SKILL.md            agent skill (also GET /v1/skill)
 ```
