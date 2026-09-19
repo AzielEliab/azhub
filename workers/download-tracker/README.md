@@ -38,3 +38,15 @@ RE-EXPAND-FROM-ARCHIVE are mesh status/refuse law — not
 Softwares-tab products. Mesh stays default
 OFF. This Worker does not implement qnsd and does not expose a
 public qnsd proxy.
+
+## Human / bot schema (`/stats` and `/count`)
+
+Additive dual-count (Whitestone canary). Classification lives in `src/classify.js`
+and response shaping in `src/stats-shape.js`.
+
+Invariant: `views === views_human + views_bot` and
+`downloads === downloads_human + downloads_bot`.
+
+Legacy strategy (b): existing KV totals are never reset. Pre-split remainder
+is shown as bot on read (`views_bot = views - views_human`). Author: Aziel Eliab only.
+
