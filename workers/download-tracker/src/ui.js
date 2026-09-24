@@ -1,4 +1,6 @@
-import { LIMITATION, SIGIL, VERSION } from "./engine.js";
+import { HOST, IDENTITY, LIMITATION, SIGIL, VERSION } from "./engine.js";
+
+const ASSET = "azhub-0.1.0.tar.gz";
 
 export function homeHtml({ views = 0, downloads = 0, github = {} } = {}) {
   const stars = github.stars || 0;
@@ -11,53 +13,108 @@ export function homeHtml({ views = 0, downloads = 0, github = {} } = {}) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AZHub — Blank Key · Aziel Eliab</title>
 <link rel="icon" type="image/png" href="/sigil.png">
+<meta name="description" content="AZHub is a Blank Key. Place modules and locks, declare the corridors, and download the package.">
+<meta name="author" content="Aziel Eliab">
+<meta name="color-scheme" content="dark light">
 <style>
-:root{color-scheme:dark;--bg:#0b0b0b;--gold:#c9a227;--trim:#8a7219;--text:#ffffff;--muted:#d8d0c0;--panel:#101010}
+:root{color-scheme:dark;--bg:#0b0b0b;--gold:#c9a227;--gold-fill:#c9a227;--on-fill:#0b0b0b;--trim:#c9a227;--text:#ffffff;--muted:#d8d0c0;--panel:#101010;--bar:#111111;--tile:#161616;--line:#3a3118;--banner-bg:#241c0d;--banner-text:#f0d78c;--focus:#ffffff;--dot:#2a2410;--hover:#241c0d;--sheet:#0b0b0b;--placed:#141414;--corridor:#c9a227;--nodes:#0f0f0f;--overlay:rgba(0,0,0,.65)}
+@media (prefers-color-scheme: light){
+  :root{color-scheme:light;--bg:#fbf8f1;--gold:#6b5010;--gold-fill:#6b5010;--on-fill:#fffdf8;--trim:#6b5010;--text:#1a1408;--muted:#3f3422;--panel:#ffffff;--bar:#f3efe4;--tile:#ffffff;--line:#d9cdb4;--banner-bg:#f6edd4;--banner-text:#3d3010;--focus:#1a1408;--dot:#e4d9c0;--hover:#f6edd4;--sheet:#ffffff;--placed:#fffdf8;--corridor:#6b5010;--nodes:#f3efe4;--overlay:rgba(26,20,8,.45)}
+}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}
-#win{display:flex;flex-direction:column;height:100%;border:2px solid var(--gold)}
-#bar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--gold);background:#111;flex-wrap:wrap}
-#bar button{background:#161616;color:var(--text);border:1px solid var(--gold);border-radius:8px;min-height:34px;padding:0 12px;cursor:pointer}
-#bar button:hover{background:#241c0d;color:var(--gold)}
-#homeBtn img,.brandmark{width:40px;height:40px;border-radius:10px;object-fit:cover;vertical-align:middle;box-shadow:0 0 0 1px #0003,0 0 0 1px var(--gold)}
-h1{font-size:16px;color:var(--gold);font-weight:500;margin:0}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,"Segoe UI",sans-serif}
+html{overflow-x:clip}
+body{overflow-x:clip}
+a.skip{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+a.skip:focus{left:1rem;top:1rem;width:auto;height:auto;margin:0;padding:.4rem .7rem;overflow:visible;clip:auto;white-space:normal;background:var(--gold-fill);color:var(--on-fill);z-index:40;text-decoration:none}
+.hero,.shell-wrap,footer.quiet{max-width:72rem;margin:0 auto}
+.hero{padding:1.4rem 1.2rem .2rem}
+.brandrow{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.hero h1{font-size:2rem;font-weight:650;letter-spacing:.02em;margin:0 0 .2rem;line-height:1.15;color:var(--text)}
+.motto{color:var(--gold);font-style:italic;margin:0 0 .7rem;font-size:1.08rem;max-width:46rem}
+.lede{color:var(--muted);margin:0 0 1rem;max-width:46rem}
+.kicker{display:block;margin:0 0 .45rem;font:.68rem/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+a.btn.block.primary{display:block;width:100%;max-width:40rem;margin:0 0 .7rem;padding:1.05rem 1.2rem;border:1px solid transparent;border-radius:9px;background:var(--gold-fill);color:var(--on-fill);text-align:center;text-decoration:none;font:700 1.25rem/1.1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.03em}
+a.btn.block.primary:hover{filter:brightness(1.08)}
+.asset-note{color:var(--muted);font-size:.9rem;margin:0 0 1rem;max-width:46rem}
+.features{display:grid;grid-template-columns:1fr;gap:.75rem 1.2rem;margin:0 0 1.2rem;padding:0;list-style:none;max-width:46rem}
+.features li{margin:0}
+.shell-wrap{padding:0 1.2rem}
+footer.quiet{padding:1.15rem 1.2rem 2.8rem;color:var(--muted);font-size:.9rem}
+footer.quiet p{margin:.35rem 0}
+footer.quiet a{color:var(--text)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+#win{display:flex;flex-direction:column;height:min(640px,72vh);min-height:420px;background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+#bar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--bar);flex-wrap:wrap}
+#bar button,#sheet button{background:var(--tile);color:var(--text);border:1px solid var(--gold);border-radius:8px;min-height:34px;padding:0 12px;cursor:pointer;font:inherit}
+#bar button:hover,#sheet button:hover{background:var(--hover);color:var(--gold)}
+#homeBtn img,.brandmark{width:40px;height:40px;border-radius:10px;object-fit:cover;vertical-align:middle;box-shadow:0 0 0 1px var(--line)}
+.bar-name{font-size:16px;color:var(--gold);font-weight:500;margin:0}
 .badge{color:var(--gold);letter-spacing:.08em;text-transform:uppercase;font-size:11px}
-#body{flex:1;display:grid;grid-template-columns:220px 1fr 300px;min-height:0}
-@media(max-width:900px){#body{grid-template-columns:1fr}}
-#palette,#side{overflow:auto;padding:12px;background:var(--panel)}
-#palette{border-right:1px solid var(--gold)}
-#side{border-left:1px solid var(--gold)}
-#surfaceWrap{position:relative;min-height:420px}
-#surface{position:absolute;inset:0;background:#0b0b0b;background-image:radial-gradient(circle at 1px 1px,#2a2410 1px,transparent 0);background-size:24px 24px}
-#corridors{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.tile{border:1px solid var(--trim);background:#161616;color:var(--text);border-radius:8px;padding:8px 10px;margin:0 0 8px;cursor:grab;user-select:none}
+#body{flex:1;display:grid;grid-template-columns:minmax(0,1fr);min-height:0;overflow:auto}
+#palette,#side{overflow:auto;padding:12px;background:var(--panel);min-width:0}
+#palette{border-top:1px solid var(--line)}
+#side{border-top:1px solid var(--line)}
+#surfaceWrap{position:relative;height:300px;min-height:300px;min-width:0}
+#surface{position:absolute;inset:0;background:var(--bg);background-image:radial-gradient(circle at 1px 1px,var(--dot) 1px,transparent 0);background-size:24px 24px}
+#corridors{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--corridor)}
+.tile{border:1px solid var(--trim);background:var(--tile);color:var(--text);border-radius:8px;padding:8px 10px;margin:0 0 8px;cursor:grab;user-select:none}
 .tile.lock{border-color:var(--gold)}
 .tile .k{color:var(--gold);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
-.placed{position:absolute;min-width:92px;padding:8px 10px;border:1px solid var(--gold);background:#141414;border-radius:8px;cursor:pointer;text-align:center}
+.placed{position:absolute;min-width:92px;max-width:calc(100% - 16px);padding:8px 10px;border:1px solid var(--gold);background:var(--placed);color:var(--text);border-radius:8px;cursor:pointer;text-align:center}
 .placed.selected{box-shadow:0 0 0 2px var(--gold)}
 .placed.isolated{opacity:.7;border-style:dashed}
 h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin:14px 0 8px}
-.banner{border:1px solid var(--trim);background:#241c0d;color:#f0d78c;padding:10px;border-radius:8px;margin-bottom:12px}
-.receipt,.cite{font-family:ui-monospace,monospace;font-size:11px;border-bottom:1px solid #2a2a2a;padding:6px 0;word-break:break-all}
-#nodes{display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid var(--gold);background:#0f0f0f;flex-wrap:wrap;color:var(--muted);font-size:12px}
-#nodes .off{color:var(--gold)}
-#nodes .on{color:var(--gold)}
-#nodesList{flex:1;min-width:12rem}
-#status{border-top:1px solid var(--gold);padding:6px 10px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);align-items:center;justify-content:center;z-index:20}
+.banner{border:1px solid var(--trim);background:var(--banner-bg);color:var(--banner-text);padding:10px;border-radius:8px;margin-bottom:12px}
+.receipt,.cite{font-family:ui-monospace,monospace;font-size:11px;border-bottom:1px solid var(--line);padding:6px 0;overflow-wrap:anywhere}
+#nodes{display:flex;align-items:center;gap:10px;padding:6px 12px;border-bottom:1px solid var(--line);background:var(--nodes);flex-wrap:wrap;color:var(--muted);font-size:12px}
+#nodes .off,#nodes .on{color:var(--gold)}
+#nodesList{flex:1 1 12rem;min-width:0;overflow-wrap:anywhere}
+#status{border-top:1px solid var(--line);padding:6px 10px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#modal{display:none;position:fixed;inset:0;background:var(--overlay);align-items:center;justify-content:center;z-index:20;padding:1rem}
 #modal.on{display:flex}
-#sheet{width:min(440px,92vw);background:#0b0b0b;border:1px solid var(--gold);border-radius:12px;padding:16px}
-#sheet button{background:#161616;color:var(--text);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;cursor:pointer;margin:4px 6px 0 0}
-#sheet button:hover{background:#241c0d;color:var(--gold)}
-#sheet button:disabled{opacity:.4;cursor:not-allowed}
-.count a,a{color:var(--gold)}
+#sheet{width:min(440px,100%);background:var(--sheet);color:var(--text);border:1px solid var(--gold);border-radius:12px;padding:16px}
+#sheet button{margin:4px 6px 0 0;max-width:100%}
+#sheet button:disabled{opacity:.45;cursor:not-allowed}
+a{color:var(--gold)}
+a:not(.btn){text-underline-offset:.15em}
+.lede,.asset-note,.banner,#status,footer.quiet{overflow-wrap:anywhere}
+button:focus-visible,a:focus-visible,.placed:focus-visible,a.skip:focus{outline:3px solid var(--focus);outline-offset:3px}
+@media (min-width:900px){
+  .features{grid-template-columns:repeat(3,minmax(0,1fr));max-width:46rem}
+  #win{height:min(720px,78vh);min-height:520px}
+  #body{overflow:hidden;grid-template-columns:220px minmax(0,1fr) 300px}
+  #palette{border-top:0;border-right:1px solid var(--line)}
+  #side{border-top:0;border-left:1px solid var(--line)}
+  #surfaceWrap{height:auto;min-height:0}
+  #nodesList{max-height:4.8rem;overflow:auto}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#win">Skip to the Hub</a>
+<header class="hero">
+  <div class="brandrow">
+    <img class="brandmark" src="/sigil.png" width="40" height="40" alt="" decoding="async">
+  </div>
+  <h1>AZHub</h1>
+  <p class="motto">Blank Key. Place a module. Declare the corridor.</p>
+  <p class="lede">v${VERSION} software by ${IDENTITY}. A neutral spatial container for modules and locks.</p>
+  <a class="btn block primary" id="downloadBtn" href="/download?asset=${ASSET}" aria-describedby="downloadNote">Download</a>
+  <p class="asset-note" id="downloadNote">${downloads} downloads · ${ASSET} · counted on this Worker for every branch and fork</p>
+  <ul class="features">
+    <li>Drag a module or Lock onto the Hub</li>
+    <li>A declared tether draws the corridor</li>
+    <li>Place, tether, isolate, and remove stay on this page</li>
+  </ul>
+  <p class="lede">In a terminal: <code>curl -fsSL ${HOST}/install.sh | bash</code> then <code>azhub ui</code> at http://127.0.0.1:8878.</p>
+</header>
+<div class="shell-wrap">
+  <p class="kicker">Blank Key</p>
 <div id="win">
   <div id="bar">
     <button id="btnHome" type="button" title="Home"><span id="homeBtn"><img class="brandmark" src="/sigil.png" width="40" height="40" alt="" decoding="async"></span></button>
-    <h1>AZHub</h1>
+    <p class="bar-name">AZHub</p>
     <span class="badge">Blank Key</span>
     <button id="btnStatus" type="button">blank_key_status</button>
     <button id="btnList" type="button">list_modules</button>
@@ -85,7 +142,7 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     </section>
     <aside id="side">
       <div class="count">Views <strong id="views">${views}</strong> · Downloads <strong id="downloads">${downloads}</strong>
-        <a href="/download?asset=azhub-0.1.0.tar.gz">tarball</a>
+        <a href="/download?asset=${ASSET}">tarball</a>
         <a href="/count">/count</a>
       </div>
       <h2>Placed</h2>
@@ -107,10 +164,15 @@ h2{color:var(--gold);font-size:12px;letter-spacing:.06em;text-transform:uppercas
     </aside>
   </div>
   <div id="status">
-    <span>AZHub ${VERSION} · AIH-WP-1.0 · Blank Key · not Interface · No receipt = no action</span>
+    <span>AZHub ${VERSION} · AIH-WP-1.0 · Blank Key · No receipt = no action</span>
     <span>GitHub ★ ${stars} · forks ${forks} · watchers ${watchers}</span>
   </div>
 </div>
+</div>
+<footer class="quiet">
+  <p>Apache-2.0 · ${IDENTITY} · AZHub v${VERSION}</p>
+  <p><a href="https://github.com/AzielEliab/azhub">GitHub</a> · <a href="/openapi.json">OpenAPI</a> · <a href="/mcp">MCP</a> · <a href="/cite.json">Cite</a></p>
+</footer>
 <div id="modal">
   <div id="sheet">
     <h2 id="popTitle">Tile</h2>
@@ -179,7 +241,7 @@ function paint(j) {
     line.setAttribute("y1", a.y + 16);
     line.setAttribute("x2", b.x + 46);
     line.setAttribute("y2", b.y + 16);
-    line.setAttribute("stroke", "#c9a227");
+    line.setAttribute("stroke", "currentColor");
     line.setAttribute("stroke-width", "2");
     svg.appendChild(line);
   });
