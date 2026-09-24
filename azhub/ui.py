@@ -106,10 +106,10 @@ button.ghost { background: transparent; color: var(--text); border: 1px solid va
 button:disabled { opacity: .45; cursor: not-allowed; }
 #notice {
   margin: 0;
-  padding: 8px 20px;
+  padding: 0 20px;
   color: var(--muted);
-  min-height: 1.5em;
 }
+#notice:not(:empty) { padding: 8px 20px; }
 #stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
