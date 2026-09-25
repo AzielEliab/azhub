@@ -27,6 +27,7 @@ python -m pip install -e .
 
 echo
 echo "Installed AZHub."
-echo "Run: azhub ui"
-echo "Then open http://127.0.0.1:8878 (loopback only)"
-echo "Blank Key — not Interface. Author: Aziel Eliab."
+echo "Open the local app:"
+echo "  azhub ui"
+echo "Then open http://127.0.0.1:8878/ and choose Place a module."
+echo "Author: Aziel Eliab"

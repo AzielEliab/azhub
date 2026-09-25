@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
+
 from .engine import Engine, LIVE_OPS, STUB_OPS
-from .meta import FRAGGATE_LIVE_OPS, LIMITATION, SPEC, __version__
+from .meta import FRAGGATE_LIVE_OPS, SPEC, __version__
 from .receipts import Ledger
 
 
-def doctor() -> int:
+def doctor(as_json: bool = False) -> int:
     eng = Engine(Ledger())
     checks = []
 
@@ -72,9 +74,26 @@ def doctor() -> int:
     checks.append(("live_ops", set(LIVE_OPS) <= set(h.get("live_ops") or [])))
 
     ok = all(p for _, p in checks)
-    print(f"AZHub doctor {__version__} spec={SPEC}")
+    if as_json:
+        print(
+            json.dumps(
+                {
+                    "ok": ok,
+                    "product": "azhub",
+                    "version": __version__,
+                    "spec": SPEC,
+                    "checks": [{"name": name, "ok": passed} for name, passed in checks],
+                },
+                indent=2,
+            )
+        )
+        return 0 if ok else 1
+    print(f"AZHub doctor {__version__}")
     for name, passed in checks:
-        print(f"  {'ok' if passed else 'FAIL':<4} {name}")
-    print(LIMITATION)
-    print("Blank Key. No receipt = no action." if ok else "Doctor failed.")
+        print(f"  {'pass' if passed else 'fail'}  {name}")
+    if ok:
+        print("All checks passed.")
+    else:
+        print("A check failed.")
+        print("Next: read the fail line above, then run azhub doctor")
     return 0 if ok else 1
